@@ -1,0 +1,14 @@
+__pycachne__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+#secrets and local settings
+.env 
+
+#Editors and OS
+.idea/
+.vscode/
+.Ds_Store
+Thumbs.db

@@ -23,7 +23,7 @@ git clone https://github.com/Makariga2323/mirtek-support-bot.git
 cd mirtek-support-bot
 git checkout dev
 
-3. Прочитайте правила работы: [CONTRIBUTING.md](CONTRIBUTING.md).
+3. Прочитайте правила работы: [CONTRIBUTING.md](contributing.md).
 
 ## Ветки
 

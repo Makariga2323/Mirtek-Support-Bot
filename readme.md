@@ -38,3 +38,5 @@ git checkout dev
 | D3nChekk | [@D3nChekk](https://github.com/D3nChekk)| Разработчик тестовых данных
 
 | glubkov2020-netizen | [@glubkov2020-netizen](https://github.com/glubkov2020-netizen)| Разработчик Мок данных
+
+| bibikuu | [@bibikuu](https://github.com/bibikuu)| Git разработчик

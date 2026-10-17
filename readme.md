@@ -19,7 +19,7 @@
 
 1. Установите Git и войдите в GitHub.
 2. Склонируйте репозиторий и перейдите на ветку `dev`:
-git clone <URL репозитория>
+git clone https://github.com/Makariga2323/mirtek-support-bot.git
 cd mirtek-support-bot
 git checkout dev
 
@@ -33,4 +33,6 @@ git checkout dev
 
 ## Команда
 
-||
+| Makariga | [@Makariga2323](https://github.com/Makariga2323)| Тимлид,Git разработчик
+| D3nChekk | [@D3nChekk](https://github.com/D3nChekk)| Разработчик тестовых данных
+| glubkov2020-netizen | [@glubkov2020-netizen](https://github.com/glubkov2020-netizen)| Разработчик Мок данных

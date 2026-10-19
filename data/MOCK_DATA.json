@@ -1,0 +1,1722 @@
+{
+  "meta": {
+    "version": "3.0",
+    "schema_version": "1.0",
+    "updated_at": "2026-10-17T10:00:00Z",
+    "description": "Мок-данные для тестирования интеллектуального сервиса ООО «Миртек». Вне скоупа: users, orders, полноценная программа лояльности.",
+    "data_source": "mock",
+    "author": "Лубков Глеб Юрьевич",
+    "contact": "g.lubkov@example.com",
+    "data_freshness_note": "Даты updated_at и last_updated синхронизированы на 2026-10-17T10:00:00Z. При обновлении моков менять обе даты.",
+    "nullable_fields": ["density_gm2", "roll_length_m", "pack_size", "metro"],
+    "schema": {
+      "catalog": "https://example.com/schemas/catalog.json",
+      "warehouses": "https://example.com/schemas/warehouses.json",
+      "stores": "https://example.com/schemas/stores.json",
+      "promotions": "https://example.com/schemas/promotions.json",
+      "delivery": "https://example.com/schemas/delivery.json",
+      "returns": "https://example.com/schemas/returns.json",
+      "payment": "https://example.com/schemas/payment.json",
+      "intents": "https://example.com/schemas/intents.json",
+      "synonyms": "https://example.com/schemas/synonyms.json"
+    }
+  },
+
+  "contacts": {
+    "support_phone": "+7 (800) 555-35-35",
+    "support_email": "support@mirtek.example",
+    "returns_email": "returns@mirtek.example",
+    "b2b_email": "b2b@mirtek.example",
+    "working_hours": "Ежедневно с 9:00 до 21:00",
+    "urls": {
+      "support": "https://mirtek.example/support",
+      "returns": "https://mirtek.example/returns"
+    }
+  },
+
+  "intents": {
+    "version": "3.0",
+    "list": [
+      { "intent_id": "check_stock", "category": "product_availability", "description": "Проверить наличие товара", "example_phrases": ["Есть ли у вас?", "В наличии?", "Где можно купить?"] },
+      { "intent_id": "check_quantity", "category": "product_availability", "description": "Узнать количество товара", "example_phrases": ["Сколько метров?", "Сколько штук?", "Сколько осталось?"] },
+      { "intent_id": "check_store", "category": "product_availability", "description": "Узнать, в каком магазине есть товар", "example_phrases": ["В каком магазине?", "На Кирова есть?"] },
+      { "intent_id": "check_today", "category": "working_hours", "description": "Узнать график на сегодня", "example_phrases": ["До скольки сегодня?", "Вы ещё открыты?"] },
+      { "intent_id": "check_weekday", "category": "working_hours", "description": "Узнать график на конкретный день", "example_phrases": ["В воскресенье работаете?", "В субботу до скольки?"] },
+      { "intent_id": "check_holiday", "category": "working_hours", "description": "Узнать график в праздник", "example_phrases": ["1 января работаете?", "В праздники открыты?"] },
+      { "intent_id": "check_now", "category": "working_hours", "description": "Узнать, открыт ли магазин сейчас", "example_phrases": ["Вы сейчас открыты?", "Можно приехать сейчас?"] },
+      { "intent_id": "list_promotions", "category": "promotions", "description": "Узнать список акций", "example_phrases": ["Какие акции?", "Что по скидкам?"] },
+      { "intent_id": "check_product_promotion", "category": "promotions", "description": "Узнать, есть ли скидка на товар", "example_phrases": ["Есть скидка на хлопок?", "На атлас скидка?"] },
+      { "intent_id": "check_deadline", "category": "promotions", "description": "Узнать срок акции", "example_phrases": ["До какого числа акция?", "Когда заканчивается?"] },
+      { "intent_id": "check_delivery", "category": "delivery", "description": "Узнать про доставку", "example_phrases": ["Вы доставляете?", "Есть доставка?"] },
+      { "intent_id": "check_cost", "category": "delivery", "description": "Узнать стоимость доставки", "example_phrases": ["Сколько стоит доставка?", "Доставка платная?"] },
+      { "intent_id": "check_time", "category": "delivery", "description": "Узнать сроки доставки", "example_phrases": ["Как быстро привезёте?", "Сколько ждать?"] },
+      { "intent_id": "check_pickup", "category": "delivery", "description": "Узнать про самовывоз", "example_phrases": ["Можно забрать самому?", "Самовывоз есть?"] },
+      { "intent_id": "check_policy", "category": "returns", "description": "Узнать политику возврата", "example_phrases": ["Можно вернуть?", "Какой срок возврата?"] },
+      { "intent_id": "check_process", "category": "returns", "description": "Узнать порядок возврата", "example_phrases": ["Как вернуть товар?", "Что нужно для возврата?"] },
+      { "intent_id": "check_refund", "category": "returns", "description": "Узнать сроки возврата денег", "example_phrases": ["Когда придут деньги?", "Как быстро вернут?"] },
+      { "intent_id": "check_price", "category": "pricing", "description": "Узнать цену товара", "example_phrases": ["Сколько стоит?", "Какая цена?"] },
+      { "intent_id": "check_discount", "category": "pricing", "description": "Узнать цену со скидкой", "example_phrases": ["Сколько со скидкой?", "Цена по акции?"] },
+      { "intent_id": "list_methods", "category": "payment", "description": "Узнать способы оплаты", "example_phrases": ["Как можно оплатить?", "Какие способы оплаты?"] },
+      { "intent_id": "check_installment", "category": "payment", "description": "Узнать про рассрочку", "example_phrases": ["Есть рассрочка?", "Можно в кредит?"] },
+      { "intent_id": "check_online", "category": "payment", "description": "Узнать про онлайн-оплату", "example_phrases": ["Можно оплатить онлайн?", "Оплата на сайте?"] },
+      { "intent_id": "check_receipt", "category": "payment", "description": "Узнать про чек", "example_phrases": ["Как получить чек?", "Чек на почту?"] },
+      { "intent_id": "check_characteristics", "category": "assortment", "description": "Узнать характеристики товара", "example_phrases": ["Из чего состоит?", "Какая ширина?"] },
+      { "intent_id": "find_analog", "category": "assortment", "description": "Найти аналог товара", "example_phrases": ["Есть подешевле?", "Что похожее?"] },
+      { "intent_id": "file_complaint", "category": "complaint", "description": "Оставить жалобу", "example_phrases": ["Хочу пожаловаться", "У меня проблема"] },
+      { "intent_id": "request_operator", "category": "complaint", "description": "Связаться с оператором", "example_phrases": ["Соедините с оператором", "Живой человек"] }
+    ]
+  },
+
+  "synonyms": {
+    "version": "3.0",
+    "cities": [
+      { "canonical": "Москва", "synonyms": ["Мск", "Moscow", "московский"] },
+      { "canonical": "Санкт-Петербург", "synonyms": ["Питер", "СПб", "Петербург", "Saint Petersburg"] }
+    ],
+    "stores": [
+      { "store_id": "STORE-001", "canonical": "Магазин на Кирова", "synonyms": ["Кирова", "на Кирова", "Кировская"] },
+      { "store_id": "STORE-002", "canonical": "Магазин на Ленина", "synonyms": ["Ленина", "на Ленина", "Ленинская"] },
+      { "store_id": "STORE-003", "canonical": "Магазин в ТЦ «Галерея»", "synonyms": ["Галерея", "ТЦ Галерея", "в Галерее"] }
+    ],
+    "product_terms": [
+      { "canonical": "атлас", "synonyms": ["атласная ткань", "атласный"] },
+      { "canonical": "хлопок", "synonyms": ["хлопковая ткань", "х/б", "хб"] },
+      { "canonical": "шёлк", "synonyms": ["шелк", "шёлковая ткань", "шелковая"] },
+      { "canonical": "лён", "synonyms": ["лен", "льняная ткань", "льняная"] },
+      { "canonical": "фурнитура", "synonyms": ["аксессуары", "мелочёвка"] }
+    ]
+  },
+
+  "catalog": {
+    "version": "3.0",
+    "products": [
+      {
+        "article": "12345",
+        "name": "Атлас синий",
+        "aliases": ["атлас", "атласная ткань", "атлас синий", "синий атлас"],
+        "tags": ["ткань", "атлас", "синий", "полиэстер", "блестящая"],
+        "category": "Ткани",
+        "subcategory": "Атлас",
+        "material": "100% полиэстер",
+        "color": "синий",
+        "width_cm": 150,
+        "density_gm2": 120,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 450.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/12345.jpg"
+      },
+      {
+        "article": "12346",
+        "name": "Атлас красный",
+        "aliases": ["атлас", "атласная ткань", "атлас красный", "красный атлас"],
+        "tags": ["ткань", "атлас", "красный", "полиэстер", "блестящая"],
+        "category": "Ткани",
+        "subcategory": "Атлас",
+        "material": "100% полиэстер",
+        "color": "красный",
+        "width_cm": 150,
+        "density_gm2": 120,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 450.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/12346.jpg"
+      },
+      {
+        "article": "12347",
+        "name": "Атлас зелёный",
+        "aliases": ["атлас", "атласная ткань", "атлас зелёный", "зелёный атлас"],
+        "tags": ["ткань", "атлас", "зелёный", "полиэстер", "блестящая"],
+        "category": "Ткани",
+        "subcategory": "Атлас",
+        "material": "100% полиэстер",
+        "color": "зелёный",
+        "width_cm": 150,
+        "density_gm2": 120,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 450.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/12347.jpg"
+      },
+      {
+        "article": "12348",
+        "name": "Атлас белый",
+        "aliases": ["атлас", "атласная ткань", "атлас белый", "белый атлас"],
+        "tags": ["ткань", "атлас", "белый", "полиэстер", "блестящая"],
+        "category": "Ткани",
+        "subcategory": "Атлас",
+        "material": "100% полиэстер",
+        "color": "белый",
+        "width_cm": 150,
+        "density_gm2": 120,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 450.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/12348.jpg"
+      },
+      {
+        "article": "23456",
+        "name": "Хлопок белый",
+        "aliases": ["хлопок", "хлопковая ткань", "хлопок белый", "белый хлопок"],
+        "tags": ["ткань", "хлопок", "белый", "натуральный", "мягкий"],
+        "category": "Ткани",
+        "subcategory": "Хлопок",
+        "material": "100% хлопок",
+        "color": "белый",
+        "width_cm": 140,
+        "density_gm2": 150,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 320.00,
+        "currency": "RUB",
+        "brand": "ЭкоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/23456.jpg"
+      },
+      {
+        "article": "23457",
+        "name": "Хлопок чёрный",
+        "aliases": ["хлопок", "хлопковая ткань", "хлопок чёрный", "чёрный хлопок"],
+        "tags": ["ткань", "хлопок", "чёрный", "натуральный", "мягкий"],
+        "category": "Ткани",
+        "subcategory": "Хлопок",
+        "material": "100% хлопок",
+        "color": "чёрный",
+        "width_cm": 140,
+        "density_gm2": 150,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 320.00,
+        "currency": "RUB",
+        "brand": "ЭкоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/23457.jpg"
+      },
+      {
+        "article": "23458",
+        "name": "Хлопок бежевый",
+        "aliases": ["хлопок", "хлопковая ткань", "хлопок бежевый", "бежевый хлопок"],
+        "tags": ["ткань", "хлопок", "бежевый", "натуральный", "мягкий"],
+        "category": "Ткани",
+        "subcategory": "Хлопок",
+        "material": "100% хлопок",
+        "color": "бежевый",
+        "width_cm": 140,
+        "density_gm2": 150,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 320.00,
+        "currency": "RUB",
+        "brand": "ЭкоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/23458.jpg"
+      },
+      {
+        "article": "23459",
+        "name": "Хлопок с принтом",
+        "aliases": ["хлопок", "хлопковая ткань", "хлопок принт", "принтованный хлопок"],
+        "tags": ["ткань", "хлопок", "принт", "разноцветный", "натуральный"],
+        "category": "Ткани",
+        "subcategory": "Хлопок",
+        "material": "100% хлопок",
+        "color": "разноцветный",
+        "width_cm": 140,
+        "density_gm2": 150,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 380.00,
+        "currency": "RUB",
+        "brand": "ЭкоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/23459.jpg"
+      },
+      {
+        "article": "34567",
+        "name": "Шёлк натуральный бежевый",
+        "aliases": ["шёлк", "шелк", "натуральный шёлк", "шёлк бежевый", "бежевый шёлк"],
+        "tags": ["ткань", "шёлк", "бежевый", "натуральный", "лёгкий"],
+        "category": "Ткани",
+        "subcategory": "Шёлк",
+        "material": "100% шёлк",
+        "color": "бежевый",
+        "width_cm": 110,
+        "density_gm2": 60,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 30,
+        "pack_size": null,
+        "price_per_unit": 1200.00,
+        "currency": "RUB",
+        "brand": "ИталТекс",
+        "country": "Италия",
+        "image_url": "https://example.com/images/34567.jpg"
+      },
+      {
+        "article": "34568",
+        "name": "Шёлк натуральный синий",
+        "aliases": ["шёлк", "шелк", "натуральный шёлк", "шёлк синий", "синий шёлк"],
+        "tags": ["ткань", "шёлк", "синий", "натуральный", "лёгкий"],
+        "category": "Ткани",
+        "subcategory": "Шёлк",
+        "material": "100% шёлк",
+        "color": "синий",
+        "width_cm": 110,
+        "density_gm2": 60,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 30,
+        "pack_size": null,
+        "price_per_unit": 1200.00,
+        "currency": "RUB",
+        "brand": "ИталТекс",
+        "country": "Италия",
+        "image_url": "https://example.com/images/34568.jpg"
+      },
+      {
+        "article": "45678",
+        "name": "Лён натуральный",
+        "aliases": ["лён", "лен", "льняная ткань", "натуральный лён"],
+        "tags": ["ткань", "лён", "натуральный", "фактурный"],
+        "category": "Ткани",
+        "subcategory": "Лён",
+        "material": "100% лён",
+        "color": "натуральный",
+        "width_cm": 150,
+        "density_gm2": 200,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 550.00,
+        "currency": "RUB",
+        "brand": "ЛенТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/45678.jpg"
+      },
+      {
+        "article": "45679",
+        "name": "Лён серый",
+        "aliases": ["лён", "лен", "льняная ткань", "лён серый", "серый лён"],
+        "tags": ["ткань", "лён", "серый", "натуральный", "фактурный"],
+        "category": "Ткани",
+        "subcategory": "Лён",
+        "material": "100% лён",
+        "color": "серый",
+        "width_cm": 150,
+        "density_gm2": 200,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 550.00,
+        "currency": "RUB",
+        "brand": "ЛенТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/45679.jpg"
+      },
+      {
+        "article": "56789",
+        "name": "Флизелин",
+        "aliases": ["флизелин", "клеевой флизелин", "прокладка"],
+        "tags": ["фурнитура", "флизелин", "прокладка", "белый"],
+        "category": "Фурнитура",
+        "subcategory": "Прокладки",
+        "material": "100% полиэстер",
+        "color": "белый",
+        "width_cm": 90,
+        "density_gm2": 40,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 100,
+        "pack_size": null,
+        "price_per_unit": 80.00,
+        "currency": "RUB",
+        "brand": "ШвейТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/56789.jpg"
+      },
+      {
+        "article": "56790",
+        "name": "Дублерин",
+        "aliases": ["дублерин", "клеевой дублерин", "прокладка"],
+        "tags": ["фурнитура", "дублерин", "прокладка", "белый"],
+        "category": "Фурнитура",
+        "subcategory": "Прокладки",
+        "material": "100% полиэстер",
+        "color": "белый",
+        "width_cm": 90,
+        "density_gm2": 60,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 100,
+        "pack_size": null,
+        "price_per_unit": 120.00,
+        "currency": "RUB",
+        "brand": "ШвейТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/56790.jpg"
+      },
+      {
+        "article": "67890",
+        "name": "Молния металлическая 20 см",
+        "aliases": ["молния", "застёжка", "молния металлическая"],
+        "tags": ["фурнитура", "молния", "металл", "серебро"],
+        "category": "Фурнитура",
+        "subcategory": "Молнии",
+        "material": "металл",
+        "color": "серебро",
+        "width_cm": 2,
+        "density_gm2": null,
+        "unit": "штука",
+        "available_units": ["штука", "упаковка"],
+        "roll_length_m": null,
+        "pack_size": 10,
+        "price_per_unit": 45.00,
+        "currency": "RUB",
+        "brand": "ШвейФур",
+        "country": "Россия",
+        "image_url": "https://example.com/images/67890.jpg"
+      },
+      {
+        "article": "67891",
+        "name": "Молния потайная 40 см",
+        "aliases": ["молния", "потайная молния", "застёжка"],
+        "tags": ["фурнитура", "молния", "полиэстер", "чёрный"],
+        "category": "Фурнитура",
+        "subcategory": "Молнии",
+        "material": "полиэстер",
+        "color": "чёрный",
+        "width_cm": 2,
+        "density_gm2": null,
+        "unit": "штука",
+        "available_units": ["штука", "упаковка"],
+        "roll_length_m": null,
+        "pack_size": 10,
+        "price_per_unit": 60.00,
+        "currency": "RUB",
+        "brand": "ШвейФур",
+        "country": "Россия",
+        "image_url": "https://example.com/images/67891.jpg"
+      },
+      {
+        "article": "78901",
+        "name": "Пуговицы деревянные 15 мм",
+        "aliases": ["пуговицы", "пуговицы деревянные", "деревянные пуговицы"],
+        "tags": ["фурнитура", "пуговицы", "дерево", "натуральный"],
+        "category": "Фурнитура",
+        "subcategory": "Пуговицы",
+        "material": "дерево",
+        "color": "натуральный",
+        "width_cm": 1.5,
+        "density_gm2": null,
+        "unit": "упаковка",
+        "available_units": ["упаковка"],
+        "roll_length_m": null,
+        "pack_size": 20,
+        "price_per_unit": 90.00,
+        "currency": "RUB",
+        "brand": "ЭкоФур",
+        "country": "Россия",
+        "image_url": "https://example.com/images/78901.jpg"
+      },
+      {
+        "article": "78902",
+        "name": "Пуговицы пластиковые 10 мм",
+        "aliases": ["пуговицы", "пуговицы пластиковые", "пластиковые пуговицы"],
+        "tags": ["фурнитура", "пуговицы", "пластик", "белый"],
+        "category": "Фурнитура",
+        "subcategory": "Пуговицы",
+        "material": "пластик",
+        "color": "белый",
+        "width_cm": 1.0,
+        "density_gm2": null,
+        "unit": "упаковка",
+        "available_units": ["упаковка"],
+        "roll_length_m": null,
+        "pack_size": 20,
+        "price_per_unit": 40.00,
+        "currency": "RUB",
+        "brand": "ШвейФур",
+        "country": "Россия",
+        "image_url": "https://example.com/images/78902.jpg"
+      },
+      {
+        "article": "89012",
+        "name": "Нитки хлопковые 100 м",
+        "aliases": ["нитки", "нитки хлопковые", "хлопковые нитки"],
+        "tags": ["фурнитура", "нитки", "хлопок", "белый"],
+        "category": "Фурнитура",
+        "subcategory": "Нитки",
+        "material": "хлопок",
+        "color": "белый",
+        "width_cm": null,
+        "density_gm2": null,
+        "unit": "штука",
+        "available_units": ["штука", "упаковка"],
+        "roll_length_m": null,
+        "pack_size": 10,
+        "price_per_unit": 70.00,
+        "currency": "RUB",
+        "brand": "НиткоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/89012.jpg"
+      },
+      {
+        "article": "89013",
+        "name": "Нитки полиэстер 200 м",
+        "aliases": ["нитки", "нитки полиэстер", "полиэстеровые нитки"],
+        "tags": ["фурнитура", "нитки", "полиэстер", "чёрный"],
+        "category": "Фурнитура",
+        "subcategory": "Нитки",
+        "material": "полиэстер",
+        "color": "чёрный",
+        "width_cm": null,
+        "density_gm2": null,
+        "unit": "штука",
+        "available_units": ["штука", "упаковка"],
+        "roll_length_m": null,
+        "pack_size": 10,
+        "price_per_unit": 100.00,
+        "currency": "RUB",
+        "brand": "НиткоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/89013.jpg"
+      },
+      {
+        "article": "90123",
+        "name": "Кружево хлопковое 5 см",
+        "aliases": ["кружево", "хлопковое кружево", "кружево 5 см"],
+        "tags": ["фурнитура", "кружево", "хлопок", "белый"],
+        "category": "Фурнитура",
+        "subcategory": "Кружево",
+        "material": "хлопок",
+        "color": "белый",
+        "width_cm": 5,
+        "density_gm2": null,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 25,
+        "pack_size": null,
+        "price_per_unit": 150.00,
+        "currency": "RUB",
+        "brand": "Кружевница",
+        "country": "Россия",
+        "image_url": "https://example.com/images/90123.jpg"
+      },
+      {
+        "article": "90124",
+        "name": "Кружево эластичное 8 см",
+        "aliases": ["кружево", "эластичное кружево", "кружево 8 см"],
+        "tags": ["фурнитура", "кружево", "полиамид", "чёрный"],
+        "category": "Фурнитура",
+        "subcategory": "Кружево",
+        "material": "полиамид",
+        "color": "чёрный",
+        "width_cm": 8,
+        "density_gm2": null,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 25,
+        "pack_size": null,
+        "price_per_unit": 200.00,
+        "currency": "RUB",
+        "brand": "Кружевница",
+        "country": "Россия",
+        "image_url": "https://example.com/images/90124.jpg"
+      },
+      {
+        "article": "01234",
+        "name": "Вискоза",
+        "aliases": ["вискоза", "вискозная ткань"],
+        "tags": ["ткань", "вискоза", "бордовый", "мягкая"],
+        "category": "Ткани",
+        "subcategory": "Вискоза",
+        "material": "100% вискоза",
+        "color": "бордовый",
+        "width_cm": 140,
+        "density_gm2": 110,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 400.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01234.jpg"
+      },
+      {
+        "article": "01235",
+        "name": "Шифон",
+        "aliases": ["шифон", "шифоновая ткань"],
+        "tags": ["ткань", "шифон", "розовый", "лёгкий"],
+        "category": "Ткани",
+        "subcategory": "Шифон",
+        "material": "100% полиэстер",
+        "color": "розовый",
+        "width_cm": 150,
+        "density_gm2": 50,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 280.00,
+        "currency": "RUB",
+        "brand": "ТексТкань",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01235.jpg"
+      },
+      {
+        "article": "01236",
+        "name": "Трикотаж",
+        "aliases": ["трикотаж", "трикотажная ткань"],
+        "tags": ["ткань", "трикотаж", "серый", "эластичный"],
+        "category": "Ткани",
+        "subcategory": "Трикотаж",
+        "material": "95% хлопок, 5% эластан",
+        "color": "серый",
+        "width_cm": 180,
+        "density_gm2": 180,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 40,
+        "pack_size": null,
+        "price_per_unit": 500.00,
+        "currency": "RUB",
+        "brand": "ЭкоТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01236.jpg"
+      },
+      {
+        "article": "01237",
+        "name": "Джинсовая ткань",
+        "aliases": ["джинс", "джинсовая ткань", "деним"],
+        "tags": ["ткань", "джинс", "синий", "плотный"],
+        "category": "Ткани",
+        "subcategory": "Джинс",
+        "material": "98% хлопок, 2% эластан",
+        "color": "синий",
+        "width_cm": 150,
+        "density_gm2": 300,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 700.00,
+        "currency": "RUB",
+        "brand": "ДенимТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01237.jpg"
+      },
+      {
+        "article": "01238",
+        "name": "Костюмная ткань",
+        "aliases": ["костюмная ткань", "костюмка"],
+        "tags": ["ткань", "костюмная", "тёмно-серый", "шерсть"],
+        "category": "Ткани",
+        "subcategory": "Костюмная",
+        "material": "70% шерсть, 30% полиэстер",
+        "color": "тёмно-серый",
+        "width_cm": 150,
+        "density_gm2": 250,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 900.00,
+        "currency": "RUB",
+        "brand": "ВулТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01238.jpg"
+      },
+      {
+        "article": "01239",
+        "name": "Плащёвка",
+        "aliases": ["плащёвка", "плащевая ткань"],
+        "tags": ["ткань", "плащёвка", "хаки", "водоотталкивающая"],
+        "category": "Ткани",
+        "subcategory": "Плащёвка",
+        "material": "100% полиэстер",
+        "color": "хаки",
+        "width_cm": 150,
+        "density_gm2": 160,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 600.00,
+        "currency": "RUB",
+        "brand": "АутдорТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01239.jpg"
+      },
+      {
+        "article": "01240",
+        "name": "Флис",
+        "aliases": ["флис", "флисовая ткань"],
+        "tags": ["ткань", "флис", "зелёный", "тёплый"],
+        "category": "Ткани",
+        "subcategory": "Флис",
+        "material": "100% полиэстер",
+        "color": "зелёный",
+        "width_cm": 150,
+        "density_gm2": 220,
+        "unit": "метр",
+        "available_units": ["метр", "рулон"],
+        "roll_length_m": 50,
+        "pack_size": null,
+        "price_per_unit": 450.00,
+        "currency": "RUB",
+        "brand": "АутдорТекс",
+        "country": "Россия",
+        "image_url": "https://example.com/images/01240.jpg"
+      }
+    ]
+  },
+
+  "warehouses": {
+    "version": "3.0",
+    "warehouses": [
+      {
+        "warehouse_id": "WH-001",
+        "store_id": "STORE-001",
+        "city": "Москва",
+        "address": "ул. Кирова, д. 10",
+        "last_updated": "2026-10-17T10:00:00Z",
+        "type": "physical",
+        "stock": [
+          { "article": "12345", "quantity": 45, "unit": "метр", "reserved": 5 },
+          { "article": "12346", "quantity": 0, "unit": "метр", "reserved": 0 },
+          { "article": "12347", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "12348", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "23456", "quantity": 120, "unit": "метр", "reserved": 10 },
+          { "article": "23457", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "23458", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "23459", "quantity": 50, "unit": "метр", "reserved": 0 },
+          { "article": "34567", "quantity": 8, "unit": "метр", "reserved": 2 },
+          { "article": "34568", "quantity": 4, "unit": "метр", "reserved": 0 },
+          { "article": "45678", "quantity": 60, "unit": "метр", "reserved": 0 },
+          { "article": "45679", "quantity": 40, "unit": "метр", "reserved": 0 },
+          { "article": "56789", "quantity": 200, "unit": "метр", "reserved": 20 },
+          { "article": "56790", "quantity": 150, "unit": "метр", "reserved": 0 },
+          { "article": "67890", "quantity": 80, "unit": "штука", "reserved": 0 },
+          { "article": "67891", "quantity": 120, "unit": "штука", "reserved": 10 },
+          { "article": "78901", "quantity": 30, "unit": "упаковка", "reserved": 0 },
+          { "article": "78902", "quantity": 50, "unit": "упаковка", "reserved": 0 },
+          { "article": "89012", "quantity": 100, "unit": "штука", "reserved": 0 },
+          { "article": "89013", "quantity": 80, "unit": "штука", "reserved": 0 },
+          { "article": "90123", "quantity": 70, "unit": "метр", "reserved": 0 },
+          { "article": "90124", "quantity": 60, "unit": "метр", "reserved": 0 },
+          { "article": "01234", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "01235", "quantity": 40, "unit": "метр", "reserved": 0 },
+          { "article": "01236", "quantity": 55, "unit": "метр", "reserved": 0 },
+          { "article": "01237", "quantity": 35, "unit": "метр", "reserved": 5 },
+          { "article": "01238", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "01239", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "01240", "quantity": 25, "unit": "метр", "reserved": 0 }
+        ]
+      },
+      {
+        "warehouse_id": "WH-002",
+        "store_id": "STORE-002",
+        "city": "Москва",
+        "address": "ул. Ленина, д. 25",
+        "last_updated": "2026-10-17T10:00:00Z",
+        "type": "physical",
+        "stock": [
+          { "article": "12345", "quantity": 0, "unit": "метр", "reserved": 0 },
+          { "article": "12346", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "12347", "quantity": 10, "unit": "метр", "reserved": 0 },
+          { "article": "12348", "quantity": 5, "unit": "метр", "reserved": 0 },
+          { "article": "23456", "quantity": 0, "unit": "метр", "reserved": 0 },
+          { "article": "23457", "quantity": 80, "unit": "метр", "reserved": 5 },
+          { "article": "23458", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "23459", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "34567", "quantity": 0, "unit": "метр", "reserved": 0 },
+          { "article": "34568", "quantity": 2, "unit": "метр", "reserved": 0 },
+          { "article": "45678", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "45679", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "56789", "quantity": 150, "unit": "метр", "reserved": 0 },
+          { "article": "56790", "quantity": 100, "unit": "метр", "reserved": 0 },
+          { "article": "67890", "quantity": 50, "unit": "штука", "reserved": 0 },
+          { "article": "67891", "quantity": 70, "unit": "штука", "reserved": 0 },
+          { "article": "78901", "quantity": 10, "unit": "упаковка", "reserved": 0 },
+          { "article": "78902", "quantity": 30, "unit": "упаковка", "reserved": 0 },
+          { "article": "89012", "quantity": 50, "unit": "штука", "reserved": 0 },
+          { "article": "89013", "quantity": 40, "unit": "штука", "reserved": 0 },
+          { "article": "90123", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "90124", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "01234", "quantity": 10, "unit": "метр", "reserved": 0 },
+          { "article": "01235", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "01236", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "01237", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "01238", "quantity": 5, "unit": "метр", "reserved": 0 },
+          { "article": "01239", "quantity": 10, "unit": "метр", "reserved": 0 },
+          { "article": "01240", "quantity": 8, "unit": "метр", "reserved": 0 }
+        ]
+      },
+      {
+        "warehouse_id": "WH-003",
+        "store_id": "STORE-003",
+        "city": "Санкт-Петербург",
+        "address": "Лиговский пр., д. 30",
+        "last_updated": "2026-10-17T10:00:00Z",
+        "type": "physical",
+        "stock": [
+          { "article": "12345", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "12346", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "12347", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "12348", "quantity": 10, "unit": "метр", "reserved": 0 },
+          { "article": "23456", "quantity": 50, "unit": "метр", "reserved": 0 },
+          { "article": "23457", "quantity": 50, "unit": "метр", "reserved": 0 },
+          { "article": "23458", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "23459", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "34567", "quantity": 3, "unit": "метр", "reserved": 0 },
+          { "article": "34568", "quantity": 1, "unit": "метр", "reserved": 0 },
+          { "article": "45678", "quantity": 40, "unit": "метр", "reserved": 0 },
+          { "article": "45679", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "56789", "quantity": 100, "unit": "метр", "reserved": 0 },
+          { "article": "56790", "quantity": 80, "unit": "метр", "reserved": 0 },
+          { "article": "67890", "quantity": 40, "unit": "штука", "reserved": 0 },
+          { "article": "67891", "quantity": 60, "unit": "штука", "reserved": 0 },
+          { "article": "78901", "quantity": 15, "unit": "упаковка", "reserved": 0 },
+          { "article": "78902", "quantity": 25, "unit": "упаковка", "reserved": 0 },
+          { "article": "89012", "quantity": 60, "unit": "штука", "reserved": 0 },
+          { "article": "89013", "quantity": 50, "unit": "штука", "reserved": 0 },
+          { "article": "90123", "quantity": 40, "unit": "метр", "reserved": 0 },
+          { "article": "90124", "quantity": 35, "unit": "метр", "reserved": 0 },
+          { "article": "01234", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "01235", "quantity": 25, "unit": "метр", "reserved": 0 },
+          { "article": "01236", "quantity": 30, "unit": "метр", "reserved": 0 },
+          { "article": "01237", "quantity": 20, "unit": "метр", "reserved": 0 },
+          { "article": "01238", "quantity": 10, "unit": "метр", "reserved": 0 },
+          { "article": "01239", "quantity": 15, "unit": "метр", "reserved": 0 },
+          { "article": "01240", "quantity": 12, "unit": "метр", "reserved": 0 }
+        ]
+      },
+      {
+        "warehouse_id": "WH-VIRTUAL",
+        "store_id": null,
+        "city": "Другие города РФ",
+        "address": "Виртуальный склад (под заказ)",
+        "last_updated": "2026-10-17T10:00:00Z",
+        "type": "virtual",
+        "note": "Используется для зоны доставки «Другие города РФ». Наличие уточняется у поставщика.",
+        "stock": [
+          { "article": "12345", "quantity": 500, "unit": "метр", "reserved": 0 },
+          { "article": "23456", "quantity": 500, "unit": "метр", "reserved": 0 },
+          { "article": "34567", "quantity": 100, "unit": "метр", "reserved": 0 },
+          { "article": "45678", "quantity": 300, "unit": "метр", "reserved": 0 },
+          { "article": "56789", "quantity": 1000, "unit": "метр", "reserved": 0 },
+          { "article": "67890", "quantity": 500, "unit": "штука", "reserved": 0 },
+          { "article": "89012", "quantity": 500, "unit": "штука", "reserved": 0 }
+        ]
+      }
+    ]
+  },
+
+  "stores": {
+    "version": "3.0",
+    "timezone": "Europe/Moscow",
+    "stores": [
+      {
+        "store_id": "STORE-001",
+        "name": "Магазин на Кирова",
+        "city": "Москва",
+        "address": "ул. Кирова, д. 10",
+        "coordinates": { "lat": 55.7558, "lon": 37.6173 },
+        "metro": "Кировская",
+        "phone": "+7 (495) 123-45-67",
+        "email": "kirova@mirtek.example",
+        "working_hours": {
+          "monday": "10:00-20:00",
+          "tuesday": "10:00-20:00",
+          "wednesday": "10:00-20:00",
+          "thursday": "10:00-20:00",
+          "friday": "10:00-21:00",
+          "saturday": "10:00-21:00",
+          "sunday": "11:00-18:00"
+        },
+        "holidays": [
+          { "date": "2026-01-01", "hours": "closed", "note": "Новый год" },
+          { "date": "2026-01-02", "hours": "closed", "note": "Новый год" },
+          { "date": "2026-03-08", "hours": "11:00-18:00", "note": "8 марта" }
+        ],
+        "special_schedule": [
+          { "date": "2026-10-20", "hours": "closed", "reason": "Санитарный день" }
+        ],
+        "services": ["самовывоз", "бронирование", "оплата картой"]
+      },
+      {
+        "store_id": "STORE-002",
+        "name": "Магазин на Ленина",
+        "city": "Москва",
+        "address": "ул. Ленина, д. 25",
+        "coordinates": { "lat": 55.7601, "lon": 37.6184 },
+        "metro": "Ленинская",
+        "phone": "+7 (495) 765-43-21",
+        "email": "lenina@mirtek.example",
+        "working_hours": {
+          "monday": "09:00-19:00",
+          "tuesday": "09:00-19:00",
+          "wednesday": "09:00-19:00",
+          "thursday": "09:00-19:00",
+          "friday": "09:00-19:00",
+          "saturday": "10:00-18:00",
+          "sunday": "closed"
+        },
+        "holidays": [
+          { "date": "2026-01-01", "hours": "closed", "note": "Новый год" },
+          { "date": "2026-01-02", "hours": "closed", "note": "Новый год" },
+          { "date": "2026-03-08", "hours": "closed", "note": "8 марта" }
+        ],
+        "special_schedule": [
+          { "date": "2026-10-21", "hours": "closed", "reason": "Санитарный день" }
+        ],
+        "services": ["самовывоз", "оплата картой"]
+      },
+      {
+        "store_id": "STORE-003",
+        "name": "Магазин в ТЦ «Галерея»",
+        "city": "Санкт-Петербург",
+        "address": "Лиговский пр., д. 30",
+        "coordinates": { "lat": 59.9343, "lon": 30.3351 },
+        "metro": "Площадь Восстания",
+        "phone": "+7 (812) 111-22-33",
+        "email": "galereya@mirtek.example",
+        "working_hours": {
+          "monday": "10:00-22:00",
+          "tuesday": "10:00-22:00",
+          "wednesday": "10:00-22:00",
+          "thursday": "10:00-22:00",
+          "friday": "10:00-22:00",
+          "saturday": "10:00-22:00",
+          "sunday": "10:00-22:00"
+        },
+        "holidays": [
+          { "date": "2026-01-01", "hours": "closed", "note": "Новый год" },
+          { "date": "2026-03-08", "hours": "10:00-20:00", "note": "8 марта" }
+        ],
+        "special_schedule": [
+          { "date": "2026-10-22", "hours": "closed", "reason": "Санитарный день" }
+        ],
+        "services": ["самовывоз", "бронирование", "оплата картой", "рассрочка"]
+      }
+    ]
+  },
+
+  "promotions": {
+    "version": "3.0",
+    "promotions": [
+      {
+        "promotion_id": "PROMO-001",
+        "name": "Скидка 15% на атлас",
+        "description": "Скидка 15% на всю атласную ткань",
+        "type": "discount",
+        "discount_percent": 15,
+        "applicable_articles": ["12345", "12346", "12347", "12348"],
+        "applicable_stores": ["STORE-001", "STORE-002", "STORE-003"],
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "conditions": "Действует при покупке от 2 метров",
+        "promo_code": null,
+        "priority": 1,
+        "stackable": false,
+        "stacking_group": "discount",
+        "url": "https://mirtek.example/promotions/atlas-15"
+      },
+      {
+        "promotion_id": "PROMO-002",
+        "name": "Хлопок 2 по цене 1",
+        "description": "При покупке двух метров хлопка — второй метр бесплатно",
+        "type": "bogo",
+        "discount_percent": 50,
+        "applicable_articles": ["23456", "23457", "23458", "23459"],
+        "applicable_stores": ["STORE-001"],
+        "start_date": "2026-10-10",
+        "end_date": "2026-10-25",
+        "conditions": "Только в магазине на Кирова",
+        "promo_code": null,
+        "priority": 2,
+        "stackable": false,
+        "stacking_group": "bogo",
+        "url": "https://mirtek.example/promotions/cotton-bogo"
+      },
+      {
+        "promotion_id": "PROMO-003",
+        "name": "Промокод WELCOME10",
+        "description": "Скидка 10% на первый заказ",
+        "type": "promo_code",
+        "discount_percent": 10,
+        "applicable_articles": ["*"],
+        "applicable_stores": ["STORE-001", "STORE-002", "STORE-003"],
+        "start_date": "2026-01-01",
+        "end_date": "2026-12-31",
+        "conditions": "Только для новых клиентов",
+        "promo_code": "WELCOME10",
+        "priority": 3,
+        "stackable": true,
+        "stacking_group": "promo_code",
+        "url": "https://mirtek.example/promotions/welcome10"
+      },
+      {
+        "promotion_id": "PROMO-004",
+        "name": "Бесплатная доставка от 3000 ₽",
+        "description": "Бесплатная доставка при заказе от 3000 рублей",
+        "type": "free_delivery",
+        "discount_percent": 0,
+        "applicable_articles": ["*"],
+        "applicable_stores": ["STORE-001", "STORE-002", "STORE-003"],
+        "start_date": "2026-10-01",
+        "end_date": "2026-12-31",
+        "conditions": "Сумма заказа от 3000 ₽",
+        "promo_code": null,
+        "priority": 4,
+        "stackable": true,
+        "stacking_group": "delivery",
+        "url": "https://mirtek.example/promotions/free-delivery",
+        "related_section": "delivery"
+      },
+      {
+        "promotion_id": "PROMO-005",
+        "name": "Скидка 20% на фурнитуру",
+        "description": "Скидка 20% на всю фурнитуру при покупке от 5 единиц",
+        "type": "discount",
+        "discount_percent": 20,
+        "applicable_articles": ["56789", "56790", "67890", "67891", "78901", "78902", "89012", "89013", "90123", "90124"],
+        "applicable_stores": ["STORE-001", "STORE-003"],
+        "start_date": "2026-10-15",
+        "end_date": "2026-11-15",
+        "conditions": "При покупке от 5 единиц",
+        "promo_code": null,
+        "priority": 5,
+        "stackable": false,
+        "stacking_group": "discount",
+        "url": "https://mirtek.example/promotions/accessories-20"
+      },
+      {
+        "promotion_id": "PROMO-006",
+        "name": "Подарок к заказу от 5000 ₽",
+        "description": "При заказе от 5000 рублей — подарок (нитки или пуговицы)",
+        "type": "gift",
+        "discount_percent": 0,
+        "applicable_articles": ["*"],
+        "applicable_stores": ["STORE-001", "STORE-002", "STORE-003"],
+        "start_date": "2026-10-01",
+        "end_date": "2026-12-31",
+        "conditions": "Сумма заказа от 5000 ₽",
+        "promo_code": null,
+        "priority": 6,
+        "stackable": true,
+        "stacking_group": "gift",
+        "url": "https://mirtek.example/promotions/gift-5000"
+      }
+    ],
+    "stacking_rules": [
+      {
+        "rule_id": "STACK-001",
+        "description": "Скидки из одной группы не суммируются — применяется с наибольшим discount_percent",
+        "group": "discount",
+        "strategy": "max_discount"
+      },
+      {
+        "rule_id": "STACK-002",
+        "description": "BOGO и скидка не суммируются",
+        "groups": ["bogo", "discount"],
+        "strategy": "priority_first"
+      },
+      {
+        "rule_id": "STACK-003",
+        "description": "Промокод можно комбинировать с одной скидкой",
+        "groups": ["promo_code", "discount"],
+        "strategy": "allow_combination"
+      },
+      {
+        "rule_id": "STACK-004",
+        "description": "Бесплатная доставка и подарок применяются независимо",
+        "groups": ["delivery", "gift"],
+        "strategy": "allow_combination"
+      }
+    ]
+  },
+
+  "delivery": {
+    "version": "3.0",
+    "available": true,
+    "restrictions": {
+      "max_weight_kg": 20,
+      "max_length_m": 5,
+      "min_order_amount": 500
+    },
+    "methods": [
+      {
+        "method_id": "DELIVERY-COURIER",
+        "name": "Курьерская доставка",
+        "description": "Доставка курьером до двери",
+        "zones": [
+          { "city": "Москва", "cost": 350, "free_from": 3000, "days": "1-2" },
+          { "city": "Санкт-Петербург", "cost": 400, "free_from": 3500, "days": "1-2" },
+          { "city": "Другие города РФ", "cost": 500, "free_from": 5000, "days": "3-7" }
+        ],
+        "payment": ["наличные", "карта", "онлайн"],
+        "url": "https://mirtek.example/delivery/courier"
+      },
+      {
+        "method_id": "DELIVERY-PICKUP",
+        "name": "Самовывоз",
+        "description": "Забрать самостоятельно из магазина",
+        "stores": ["STORE-001", "STORE-002", "STORE-003"],
+        "cost": 0,
+        "reservation_days": 3,
+        "conditions": "Бронь хранится 3 дня",
+        "url": "https://mirtek.example/delivery/pickup"
+      }
+    ]
+  },
+
+  "returns": {
+    "version": "3.0",
+    "policy": "Возврат товара надлежащего качества возможен в течение 14 дней с момента покупки при сохранении чека и товарного вида.",
+    "period_days": 14,
+    "conditions": [
+      "Сохранён чек или иной документ, подтверждающий покупку",
+      "Товар не использовался",
+      "Сохранена упаковка и товарный вид",
+      "Отрез ткани не был разрезан по индивидуальному заказу"
+    ],
+    "non_returnable": [
+      "Ткань, отрезанная по индивидуальному заказу клиента",
+      "Товары с повреждённой упаковкой",
+      "Товары, бывшие в употреблении"
+    ],
+    "process": [
+      "Обратиться в магазин покупки или на горячую линию",
+      "Предоставить чек и товар",
+      "Заполнить заявление на возврат",
+      "Получить возврат денег в течение 10 рабочих дней"
+    ],
+    "refund_days": 10,
+    "refund_methods": ["наличные", "на карту", "на расчётный счёт"],
+    "refund_timeline": [
+      { "method": "на карту", "days": 5 },
+      { "method": "наличные", "days": 1 },
+      { "method": "на расчётный счёт", "days": 10 }
+    ],
+    "exceptions": [
+      "Ткань, отрезанная по индивидуальному заказу",
+      "Товары с повреждённой упаковкой"
+    ],
+    "contact": {
+      "phone": "+7 (800) 555-35-35",
+      "email": "returns@mirtek.example",
+      "url": "https://mirtek.example/returns"
+    }
+  },
+
+  "payment": {
+    "version": "3.0",
+    "methods": [
+      {
+        "method_id": "PAY-CASH",
+        "name": "Наличные",
+        "description": "Оплата наличными в магазине",
+        "available_in": ["STORE-001", "STORE-002", "STORE-003"],
+        "online": false,
+        "limits": { "max": 100000 }
+      },
+      {
+        "method_id": "PAY-CARD",
+        "name": "Банковская карта",
+        "description": "Оплата картой в магазине или онлайн",
+        "available_in": ["STORE-001", "STORE-002", "STORE-003"],
+        "online": true,
+        "limits": { "min": 100, "max": 500000 }
+      },
+      {
+        "method_id": "PAY-SBP",
+        "name": "СБП",
+        "description": "Оплата через Систему быстрых платежей",
+        "available_in": ["STORE-001", "STORE-003"],
+        "online": true,
+        "limits": { "min": 100, "max": 300000 }
+      },
+      {
+        "method_id": "PAY-INSTALLMENT",
+        "name": "Рассрочка",
+        "description": "Рассрочка на 3, 6 или 12 месяцев",
+        "available_in": ["STORE-003"],
+        "online": false,
+        "terms": "Без переплаты при сроке до 6 месяцев",
+        "limits": { "min": 5000, "max": 300000 }
+      },
+      {
+        "method_id": "PAY-QR",
+        "name": "QR-код",
+        "description": "Оплата по QR-коду",
+        "available_in": ["STORE-001", "STORE-003"],
+        "online": true,
+        "limits": { "min": 100, "max": 200000 }
+      }
+    ],
+    "receipt": {
+      "available": true,
+      "methods": ["электронный", "бумажный"],
+      "url": "https://mirtek.example/receipt"
+    }
+  },
+
+  "loyalty": {
+    "version": "3.0",
+    "note": "Краткое описание программы лояльности. Полноценные users/orders — вне скоупа мок-данных.",
+    "program": {
+      "name": "Карта постоянного клиента",
+      "threshold_rub": 5000,
+      "discount_percent": 5,
+      "description": "При покупке от 5000 ₽ выдаётся карта постоянного клиента со скидкой 5% на все последующие покупки."
+    }
+  },
+
+  "faq": {
+    "version": "3.0",
+    "questions": [
+      {
+        "question": "Как связаться с поддержкой?",
+        "answer": "Вы можете связаться с нами по телефону +7 (800) 555-35-35 или написать на почту support@mirtek.example. Горячая линия работает ежедневно с 9:00 до 21:00.",
+        "tags": ["поддержка", "контакты"],
+        "related_contact": "support_phone"
+      },
+      {
+        "question": "Есть ли у вас доставка в другие страны?",
+        "answer": "На данный момент мы доставляем только по России. Международная доставка не предусмотрена.",
+        "tags": ["доставка", "международная"]
+      },
+      {
+        "question": "Можно ли примерить ткань перед покупкой?",
+        "answer": "Да, вы можете посмотреть и потрогать ткань в любом нашем магазине. Примерка не предусмотрена, но вы можете оценить текстуру, цвет и плотность.",
+        "tags": ["магазин", "ткань"]
+      },
+      {
+        "question": "Работаете ли вы с юридическими лицами?",
+        "answer": "Да, мы работаем с юридическими лицами. Для оформления заказа свяжитесь с нами по телефону +7 (800) 555-35-35 или напишите на b2b@mirtek.example.",
+        "tags": ["b2b", "юрлица"],
+        "related_contact": "b2b_email"
+      },
+      {
+        "question": "Есть ли у вас программа лояльности?",
+        "answer": "Да, у нас есть программа лояльности. При покупке от 5000 ₽ вы получаете карту постоянного клиента со скидкой 5% на все последующие покупки.",
+        "tags": ["лояльность", "скидки"],
+        "related_section": "loyalty"
+      }
+    ]
+  },
+
+  "handoff_rules": {
+    "version": "3.0",
+    "rules": [
+      { "rule_id": "HR-001", "condition": "confidence < 0.5", "reason": "Низкая уверенность модели", "priority": "high" },
+      { "rule_id": "HR-002", "condition": "unknown_category", "reason": "Неизвестная категория обращения", "priority": "high" },
+      { "rule_id": "HR-003", "condition": "customer_requested_operator", "reason": "Клиент запросил оператора", "priority": "urgent" },
+      { "rule_id": "HR-004", "condition": "no_data_in_sources", "reason": "Информация отсутствует в базе знаний", "priority": "normal" },
+      { "rule_id": "HR-005", "condition": "multiple_intents_conflict", "reason": "Конфликт нескольких намерений в одном запросе", "priority": "normal" }
+    ]
+  },
+
+  "edge_cases": {
+    "version": "3.0",
+    "cases": [
+      {
+        "case_id": "EC-001",
+        "description": "Товар есть, но весь в резерве (quantity == reserved)",
+        "expected_behavior": "Сообщить, что товар зарезервирован, предложить аналог или передать оператору",
+        "example": { "article": "12345", "quantity": 5, "reserved": 5 }
+      },
+      {
+        "case_id": "EC-002",
+        "description": "Клиент спрашивает товар, которого нет в каталоге",
+        "expected_behavior": "Передать оператору с причиной «Информация о товаре отсутствует в базе знаний»",
+        "example": { "question": "Есть ли у вас швейные машинки?" }
+      },
+      {
+        "case_id": "EC-003",
+        "description": "Клиент спрашивает про магазин, которого нет в справочнике",
+        "expected_behavior": "Передать оператору с причиной «Магазин не найден»",
+        "example": { "question": "Есть ли товар в магазине на Пушкина?" }
+      },
+      {
+        "case_id": "EC-004",
+        "description": "Вопрос вне зоны работы сервиса (погода, курс валют)",
+        "expected_behavior": "Передать оператору с причиной «Вне зоны компетенции сервиса»",
+        "example": { "question": "Какая завтра погода?" }
+      },
+      {
+        "case_id": "EC-005",
+        "description": "Клиент задаёт несколько вопросов в одном сообщении",
+        "expected_behavior": "Обработать первый вопрос, остальные передать оператору или уточнить",
+        "example": { "question": "Есть ли атлас на Кирова и до скольки вы работаете?" }
+      }
+    ]
+  },
+
+  "errors": {
+    "version": "3.0",
+    "codes": [
+      { "code": "ERR-400", "http_status": 400, "message": "Некорректный запрос", "description": "Отсутствует обязательное поле или неверный формат" },
+      { "code": "ERR-401", "http_status": 401, "message": "Не авторизован", "description": "Отсутствует или неверный токен" },
+      { "code": "ERR-404", "http_status": 404, "message": "Не найдено", "description": "Запрашиваемый ресурс не существует" },
+      { "code": "ERR-422", "http_status": 422, "message": "Ошибка валидации", "description": "Данные не прошли валидацию по схеме" },
+      { "code": "ERR-429", "http_status": 429, "message": "Слишком много запросов", "description": "Превышен лимит запросов" },
+      { "code": "ERR-500", "http_status": 500, "message": "Внутренняя ошибка", "description": "Ошибка на стороне сервиса" },
+      { "code": "ERR-503", "http_status": 503, "message": "Сервис недоступен", "description": "Временная недоступность (например, LLM)" }
+    ]
+  },
+
+  "test_scenarios": {
+    "version": "3.0",
+    "scenarios": [
+      {
+        "id": "TS-001",
+        "description": "Клиент спрашивает наличие товара по артикулу в конкретном магазине",
+        "input": "Есть ткань артикул 12345 на Кирова?",
+        "expected_decision": "reply",
+        "expected_category": "product_availability",
+        "expected_entities": { "article": "12345", "store": "Кирова" },
+        "expected_reply_contains": ["45 метров"]
+      },
+      {
+        "id": "TS-002",
+        "description": "Клиент спрашивает наличие товара, которого нет в магазине",
+        "input": "Есть ли хлопок белый на Ленина?",
+        "expected_decision": "reply",
+        "expected_category": "product_availability",
+        "expected_entities": { "article": "23456", "store": "Ленина" },
+        "expected_reply_contains": ["отсутствует"]
+      },
+      {
+        "id": "TS-003",
+        "description": "Клиент спрашивает график работы магазина",
+        "input": "До скольки сегодня работает магазин на Кирова?",
+        "expected_decision": "reply",
+        "expected_category": "working_hours",
+        "expected_entities": { "store": "Кирова" },
+        "expected_reply_contains": ["20:00"]
+      },
+      {
+        "id": "TS-004",
+        "description": "Клиент спрашивает про работу в праздник",
+        "input": "Вы работаете 1 января?",
+        "expected_decision": "reply",
+        "expected_category": "working_hours",
+        "expected_entities": { "date": "2026-01-01" },
+        "expected_reply_contains": ["закрыты"]
+      },
+      {
+        "id": "TS-005",
+        "description": "Клиент спрашивает список акций",
+        "input": "Какие сейчас действуют акции?",
+        "expected_decision": "reply",
+        "expected_category": "promotions",
+        "expected_entities": {},
+        "expected_reply_contains": ["скидка 15%", "хлопок"]
+      },
+      {
+        "id": "TS-006",
+        "description": "Клиент спрашивает про конкретную акцию",
+        "input": "Есть ли скидка на хлопок?",
+        "expected_decision": "reply",
+        "expected_category": "promotions",
+        "expected_entities": { "product_name": "хлопок" },
+        "expected_reply_contains": ["2 по цене 1"]
+      },
+      {
+        "id": "TS-007",
+        "description": "Клиент спрашивает стоимость доставки",
+        "input": "Сколько стоит доставка в Москву?",
+        "expected_decision": "reply",
+        "expected_category": "delivery",
+        "expected_entities": { "city": "Москва" },
+        "expected_reply_contains": ["350"]
+      },
+      {
+        "id": "TS-008",
+        "description": "Клиент спрашивает про самовывоз",
+        "input": "Можно забрать самому?",
+        "expected_decision": "reply",
+        "expected_category": "delivery",
+        "expected_entities": {},
+        "expected_reply_contains": ["самовывоз", "3 дня"]
+      },
+      {
+        "id": "TS-009",
+        "description": "Клиент спрашивает срок возврата",
+        "input": "Сколько дней на возврат?",
+        "expected_decision": "reply",
+        "expected_category": "returns",
+        "expected_entities": {},
+        "expected_reply_contains": ["14 дней"]
+      },
+      {
+        "id": "TS-010",
+        "description": "Клиент спрашивает про возврат отреза",
+        "input": "Можно ли вернуть отрез ткани?",
+        "expected_decision": "reply",
+        "expected_category": "returns",
+        "expected_entities": { "product_name": "отрез ткани" },
+        "expected_reply_contains": ["14 дней"]
+      },
+      {
+        "id": "TS-011",
+        "description": "Клиент спрашивает про оплату картой",
+        "input": "Можно оплатить картой?",
+        "expected_decision": "reply",
+        "expected_category": "payment",
+        "expected_entities": { "payment_method": "карта" },
+        "expected_reply_contains": ["картой"]
+      },
+      {
+        "id": "TS-012",
+        "description": "Клиент спрашивает про рассрочку",
+        "input": "Есть ли рассрочка?",
+        "expected_decision": "reply",
+        "expected_category": "payment",
+        "expected_entities": { "payment_method": "рассрочка" },
+        "expected_reply_contains": ["рассрочка"]
+      },
+      {
+        "id": "TS-013",
+        "description": "Клиент спрашивает про товар, которого нет в каталоге",
+        "input": "А вы продаёте швейные машинки?",
+        "expected_decision": "handoff",
+        "expected_category": "unknown",
+        "expected_entities": {},
+        "expected_handoff_reason": "Информация о товаре отсутствует в базе знаний"
+      },
+      {
+        "id": "TS-014",
+        "description": "Клиент явно просит оператора",
+        "input": "Соедините с оператором",
+        "expected_decision": "handoff",
+        "expected_category": "complaint",
+        "expected_entities": {},
+        "expected_handoff_reason": "Клиент запросил оператора"
+      },
+      {
+        "id": "TS-015",
+        "description": "Клиент задаёт вопрос из FAQ",
+        "input": "Работаете ли вы с юридическими лицами?",
+        "expected_decision": "reply",
+        "expected_category": "faq",
+        "expected_entities": {},
+        "expected_reply_contains": ["юридическими лицами"]
+      }
+    ]
+  },
+
+  "examples": {
+    "version": "3.0",
+    "items": [
+      {
+        "scenario": "product_availability",
+        "difficulty": "easy",
+        "tags": ["article", "store"],
+        "question": "Есть ткань артикул 12345 на Кирова?",
+        "expected": {
+          "decision": "reply",
+          "category": "product_availability",
+          "reply": "Да, атлас синий (артикул 12345) есть в наличии в магазине на Кирова. В наличии 45 метров.",
+          "entities": { "article": "12345", "store": "Кирова" },
+          "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "product_availability",
+        "difficulty": "medium",
+        "tags": ["article", "multiple_stores"],
+        "question": "Где сейчас есть артикул 34567?",
+        "expected": {
+          "decision": "reply",
+          "category": "product_availability",
+          "reply": "Шёлк натуральный бежевый (артикул 34567) есть в наличии в магазинах: Кирова — 8 метров, ТЦ «Галерея» — 3 метра. В магазине на Ленина — нет в наличии.",
+          "entities": { "article": "34567" },
+          "confidence": 0.94
+        }
+      },
+      {
+        "scenario": "product_availability",
+        "difficulty": "medium",
+        "tags": ["product_name", "store", "out_of_stock"],
+        "question": "Сколько метров хлопка белого на Ленина?",
+        "expected": {
+          "decision": "reply",
+          "category": "product_availability",
+          "reply": "Хлопок белый (артикул 23456) в магазине на Ленина отсутствует. В наличии есть в магазине на Кирова — 120 метров и в ТЦ «Галерея» — 50 метров.",
+          "entities": { "article": "23456", "store": "Ленина" },
+          "confidence": 0.93
+        }
+      },
+      {
+        "scenario": "product_availability",
+        "difficulty": "hard",
+        "tags": ["product_name", "no_specifics"],
+        "question": "Есть ли у вас шёлк?",
+        "expected": {
+          "decision": "reply",
+          "category": "product_availability",
+          "reply": "Да, у нас есть натуральный шёлк двух цветов: бежевый (артикул 34567) и синий (артикул 34568). Уточните, пожалуйста, какой цвет вас интересует и в каком магазине.",
+          "entities": { "product_name": "шёлк" },
+          "confidence": 0.88
+        }
+      },
+      {
+        "scenario": "working_hours",
+        "difficulty": "easy",
+        "tags": ["store", "today"],
+        "question": "До скольки сегодня работает магазин на Кирова?",
+        "expected": {
+          "decision": "reply",
+          "category": "working_hours",
+          "reply": "Сегодня магазин на Кирова работает до 20:00.",
+          "entities": { "store": "Кирова" },
+          "confidence": 0.98
+        }
+      },
+      {
+        "scenario": "working_hours",
+        "difficulty": "medium",
+        "tags": ["weekday", "multiple_stores"],
+        "question": "Вы работаете в воскресенье?",
+        "expected": {
+          "decision": "reply",
+          "category": "working_hours",
+          "reply": "Магазин на Кирова работает в воскресенье с 11:00 до 18:00. Магазин на Ленина в воскресенье закрыт. Магазин в ТЦ «Галерея» работает с 10:00 до 22:00.",
+          "entities": {},
+          "confidence": 0.95
+        }
+      },
+      {
+        "scenario": "working_hours",
+        "difficulty": "medium",
+        "tags": ["holiday"],
+        "question": "Вы работаете 1 января?",
+        "expected": {
+          "decision": "reply",
+          "category": "working_hours",
+          "reply": "1 января все магазины закрыты в связи с праздником. Со 2 января магазин на Кирова и ТЦ «Галерея» работают в обычном режиме, магазин на Ленина — с 3 января.",
+          "entities": { "date": "2026-01-01" },
+          "confidence": 0.92
+        }
+      },
+      {
+        "scenario": "promotions",
+        "difficulty": "easy",
+        "tags": ["list"],
+        "question": "Какие сейчас действуют акции?",
+        "expected": {
+          "decision": "reply",
+          "category": "promotions",
+          "reply": "Сейчас действуют акции: скидка 15% на атлас (до 31 октября), хлопок 2 по цене 1 в магазине на Кирова (до 25 октября), промокод WELCOME10 на первый заказ, бесплатная доставка от 3000 ₽, скидка 20% на фурнитуру от 5 единиц (до 15 ноября) и подарок к заказу от 5000 ₽.",
+          "entities": {},
+          "confidence": 0.93
+        }
+      },
+      {
+        "scenario": "promotions",
+        "difficulty": "medium",
+        "tags": ["product_name"],
+        "question": "Есть ли скидка на хлопок?",
+        "expected": {
+          "decision": "reply",
+          "category": "promotions",
+          "reply": "Да, на хлопок действует акция «2 по цене 1» в магазине на Кирова до 25 октября. При покупке двух метров второй метр бесплатно.",
+          "entities": { "product_name": "хлопок" },
+          "confidence": 0.91
+        }
+      },
+      {
+        "scenario": "promotions",
+        "difficulty": "medium",
+        "tags": ["promo_code"],
+        "question": "Действует ли промокод WELCOME10?",
+        "expected": {
+          "decision": "reply",
+          "category": "promotions",
+          "reply": "Да, промокод WELCOME10 даёт скидку 10% на первый заказ. Действует до 31 декабря 2026 года для новых клиентов.",
+          "entities": { "promo_code": "WELCOME10" },
+          "confidence": 0.97
+        }
+      },
+      {
+        "scenario": "delivery",
+        "difficulty": "easy",
+        "tags": ["city"],
+        "question": "Сколько стоит доставка в Москву?",
+        "expected": {
+          "decision": "reply",
+          "category": "delivery",
+          "reply": "Доставка курьером по Москве стоит 350 ₽. При заказе от 3000 ₽ — бесплатно. Срок доставки — 1-2 дня.",
+          "entities": { "city": "Москва" },
+          "confidence": 0.97
+        }
+      },
+      {
+        "scenario": "delivery",
+        "difficulty": "easy",
+        "tags": ["pickup"],
+        "question": "Можно забрать самому?",
+        "expected": {
+          "decision": "reply",
+          "category": "delivery",
+          "reply": "Да, самовывоз доступен в магазинах на Кирова, на Ленина и в ТЦ «Галерея». Бронь хранится 3 дня. Стоимость самовывоза — 0 ₽.",
+          "entities": {},
+          "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "delivery",
+        "difficulty": "medium",
+        "tags": ["city", "spb"],
+        "question": "Доставляете ли вы в Санкт-Петербург?",
+        "expected": {
+          "decision": "reply",
+          "category": "delivery",
+          "reply": "Да, доставка в Санкт-Петербург стоит 400 ₽. При заказе от 3500 ₽ — бесплатно. Срок доставки — 1-2 дня.",
+          "entities": { "city": "Санкт-Петербург" },
+          "confidence": 0.95
+        }
+      },
+      {
+        "scenario": "returns",
+        "difficulty": "easy",
+        "tags": ["period"],
+        "question": "Сколько дней на возврат?",
+        "expected": {
+          "decision": "reply",
+          "category": "returns",
+          "reply": "Возврат товара надлежащего качества возможен в течение 14 дней с момента покупки при сохранении чека и товарного вида.",
+          "entities": {},
+          "confidence": 0.98
+        }
+      },
+      {
+        "scenario": "returns",
+        "difficulty": "medium",
+        "tags": ["product_name"],
+        "question": "Можно ли вернуть отрез ткани?",
+        "expected": {
+          "decision": "reply",
+          "category": "returns",
+          "reply": "Да, отрез ткани можно вернуть в течение 14 дней, если он не был разрезан по индивидуальному заказу и сохранён товарный вид.",
+          "entities": { "product_name": "отрез ткани" },
+          "confidence": 0.94
+        }
+      },
+      {
+        "scenario": "returns",
+        "difficulty": "medium",
+        "tags": ["refund"],
+        "question": "Когда придут деньги за возврат?",
+        "expected": {
+          "decision": "reply",
+          "category": "returns",
+          "reply": "Возврат денег осуществляется в течение 10 рабочих дней с момента оформления возврата. Способ возврата: наличные, на карту или на расчётный счёт.",
+          "entities": {},
+          "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "payment",
+        "difficulty": "easy",
+        "tags": ["card"],
+        "question": "Можно оплатить картой?",
+        "expected": {
+          "decision": "reply",
+          "category": "payment",
+          "reply": "Да, оплата банковской картой доступна во всех магазинах и онлайн.",
+          "entities": { "payment_method": "карта" },
+          "confidence": 0.99
+        }
+      },
+      {
+        "scenario": "payment",
+        "difficulty": "medium",
+        "tags": ["installment"],
+        "question": "Есть ли рассрочка?",
+        "expected": {
+          "decision": "reply",
+          "category": "payment",
+          "reply": "Да, рассрочка на 3, 6 или 12 месяцев доступна в магазине в ТЦ «Галерея». Без переплаты при сроке до 6 месяцев.",
+          "entities": { "payment_method": "рассрочка" },
+          "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "payment",
+        "difficulty": "medium",
+        "tags": ["receipt"],
+        "question": "Как получить чек?",
+        "expected": {
+          "decision": "reply",
+          "category": "payment",
+          "reply": "Чек можно получить в электронном или бумажном виде. Электронный чек приходит на email после оплаты, бумажный — выдаётся в магазине.",
+          "entities": {},
+          "confidence": 0.95
+        }
+      },
+      {
+        "scenario": "unknown",
+        "difficulty": "hard",
+        "tags": ["unknown", "handoff"],
+        "question": "А вы продаёте швейные машинки?",
+        "expected": {
+          "decision": "handoff",
+          "category": "unknown",
+          "reply": null,
+          "handoff_reason": "Информация о товаре отсутствует в базе знаний",
+          "entities": {},
+          "confidence": 0.45
+        }
+      },
+      {
+        "scenario": "unknown",
+        "difficulty": "easy",
+        "tags": ["operator", "handoff"],
+        "question": "У меня проблема с заказом, соедините с оператором",
+        "expected": {
+          "decision": "handoff",
+          "category": "complaint",
+          "reply": null,
+          "handoff_reason": "Клиент запросил оператора",
+          "entities": {},
+          "confidence": 0.99
+        }
+      }
+    ]
+  }
+}

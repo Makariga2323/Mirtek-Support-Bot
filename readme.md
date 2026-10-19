@@ -33,10 +33,14 @@ git checkout dev
 
 ## Команда
 
-| Makariga | [@Makariga2323](https://github.com/Makariga2323)| Тимлид,Git разработчик
+| Makariga | [@Makariga2323](https://github.com/Makariga2323)| Тимлид, Git разработчик, 
 
 | D3nChekk | [@D3nChekk](https://github.com/D3nChekk)| Разработчик тестовых данных
 
 | glubkov2020-netizen | [@glubkov2020-netizen](https://github.com/glubkov2020-netizen)| Разработчик Мок данных
 
+<<<<<<< HEAD
 | bibikuu | [@bibikuu](https://github.com/bibikuu)| Git разработчик
+=======
+| bibikuu | [@burdurduk](https://github.com/bibikuu)| Git разработчик
+>>>>>>> c506e0ad050d4394df213c235a697c051f5dee33

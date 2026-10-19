@@ -39,8 +39,4 @@ git checkout dev
 
 | glubkov2020-netizen | [@glubkov2020-netizen](https://github.com/glubkov2020-netizen)| Разработчик Мок данных
 
-<<<<<<< HEAD
-| bibikuu | [@bibikuu](https://github.com/bibikuu)| Git разработчик
-=======
 | bibikuu | [@burdurduk](https://github.com/bibikuu)| Git разработчик
->>>>>>> c506e0ad050d4394df213c235a697c051f5dee33

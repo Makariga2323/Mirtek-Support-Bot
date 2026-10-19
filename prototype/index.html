@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход</title>
+    <ling rel ="stylesheet" href = "style.css">
+</head>
+<body>
+    <main class="card">
+        <h1>Вход</h1>
+        <p>Введите токен один раз.</p>
+        <input id="token" type ="text" placeholder = "Токен">
+        <button id="login">Войти</button>
+        <p id="error" class="error"></p>
+    </main>
+
+    <script>
+        if(localStorage.getItem("token")){
+            location.href = "chat.html";
+        }
+        document.getElementById("login").onclick = function () {
+            const token = document.getElementById("token").value.trim();
+            if (token === "") {
+                document.getElementById("error").textContent = "Введите токен";
+                return;
+            }
+        }
+        localStorage.setItem("token", token);
+        location.href = "chat.hmtl";
+    </script>
+</body>
+</html>

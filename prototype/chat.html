@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Чат поддержки</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Чат поддержки</h1>
+    <div id="messages"></div>
+    <input id="text" type="text" placeholder="Ваш вопрос">
+    <button id="send">Отправить</button>
+    <button id="logout" class="link">Выйти</button>
+  </main>
+
+  <script>
+    const API = "http://127.0.0.1:8000";   // тот же адрес, что в index.html
+    const token = localStorage.getItem("user_token");
+    const sessionId = localStorage.getItem("session_id");
+    const messages = document.getElementById("messages");
+
+    function goLogin() {
+      localStorage.clear();
+      location.href = "index.html";
+    }
+    if (!token || !sessionId) goLogin();
+
+    function addMessage(text, who) {
+      const div = document.createElement("div");
+      div.className = "msg " + who;
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Единая функция запросов: токен в заголовке, при 401/403 возвращаем на вход
+    async function api(path, method, body) {
+      const r = await fetch(API + path, {
+        method: method,
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      if (r.status === 401 || r.status === 403) {
+        goLogin();
+        throw new Error("auth");
+      }
+      if (!r.ok) throw new Error("http " + r.status);
+      return r.json();
+    }
+
+    // Проверка сессии на сервере при открытии чата
+    api("/api/v1/chat/status?session_id=" + encodeURIComponent(sessionId), "GET")
+      .catch(function (e) {
+        if (e.message === "http 404") goLogin();   // сессия неизвестна серверу или истекла
+        else if (e.message !== "auth") addMessage("Нет связи с сервером", "error");
+      });
+
+    function addEscalateButton(messageId) {
+      const btn = document.createElement("button");
+      btn.textContent = "Отправить оператору";
+      btn.onclick = async function () {
+        btn.disabled = true;
+        try {
+          const d = await api("/api/v1/chat/escalate", "POST", {
+            session_id: sessionId,
+            message_id: messageId,
+            idempotency_key: "idem-" + messageId,   // одна заявка на одно сообщение
+          });
+          addMessage("Запрос передан специалисту (заявка " + d.ticket_id + ")", "status");
+        } catch (e) {
+          btn.disabled = false;
+          if (e.message !== "auth") addMessage("Не удалось передать запрос", "error");
+        }
+      };
+      messages.appendChild(btn);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function send() {
+      const input = document.getElementById("text");
+      const text = input.value.trim();
+      if (text === "") return;
+      addMessage(text, "user");
+      input.value = "";
+      try {
+        const data = await api("/api/v1/chat/messages", "POST", {
+          session_id: sessionId,
+          text: text,
+        });
+        if (data.status === "answered") {
+          addMessage(data.answer, "bot");
+        } else {
+          addMessage(data.error, "bot");
+          addEscalateButton(data.message_id);
+        }
+      } catch (e) {
+        if (e.message !== "auth") addMessage("Ошибка: сервер не ответил", "error");
+      }
+    }
+
+    document.getElementById("send").onclick = send;
+    document.getElementById("text").onkeydown = function (e) {
+      if (e.key === "Enter") send();
+    };
+
+    document.getElementById("logout").onclick = async function () {
+      try { await api("/api/v1/auth/logout", "POST", { session_id: sessionId }); } catch (e) {}
+      goLogin();
+    };
+  </script>
+</body>
+</html>

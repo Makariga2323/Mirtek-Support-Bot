@@ -33,7 +33,7 @@ git checkout dev
 
 ## Команда
 
-| Makariga | [@Makariga2323](https://github.com/Makariga2323)| Тимлид,Git разработчик
+| Makariga | [@Makariga2323](https://github.com/Makariga2323)| Тимлид, Git разработчик, 
 
 | D3nChekk | [@D3nChekk](https://github.com/D3nChekk)| Разработчик тестовых данных
 

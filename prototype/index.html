@@ -9,15 +9,22 @@
 <body>
   <main class="card">
     <h1>Вход</h1>
-    <p>Введите токен 2 уровня защиты.</p>
+    <p>Введите токен доступа.</p>
     <input id="token" type="text" placeholder="Токен">
     <button id="login">Войти</button>
     <p id="error" class="error"></p>
   </main>
 
   <script>
-    // При загрузке жестко не редиректим, пока сервер не подтвердит токен в чате.
-    document.getElementById("login").onclick = async function () {
+    // Адрес сервера задан ОДИН раз. Менять только здесь.
+    const API = "http://127.0.0.1:8000";
+
+    // Уже входили: чат сам проверит сессию на сервере
+    if (localStorage.getItem("user_token") && localStorage.getItem("session_id")) {
+      location.href = "chat.html";
+    }
+
+    async function login() {
       const token = document.getElementById("token").value.trim();
       const error = document.getElementById("error");
       if (token === "") {
@@ -25,20 +32,29 @@
         return;
       }
       try {
-        const r = await fetch("http://127.0.0.1:8000/api/login", {
+        const r = await fetch(API + "/api/v1/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: token }),
         });
-        if (r.ok) {
-          localStorage.setItem("token", token);
-          location.href = "chat.html";
-        } else {
+        if (r.status === 401) {
           error.textContent = "Неверный токен";
+        } else if (!r.ok) {
+          error.textContent = "Ошибка сервера (код " + r.status + "), смотрите терминал uvicorn";
+        } else {
+          const data = await r.json();
+          localStorage.setItem("user_token", token);
+          localStorage.setItem("session_id", data.session_id);
+          location.href = "chat.html";
         }
       } catch (e) {
-        error.textContent = "Сервер бэкенда недоступен";
+        error.textContent = "Нет связи с сервером. Запущен ли uvicorn на порту 8000?";
       }
+    }
+
+    document.getElementById("login").onclick = login;
+    document.getElementById("token").onkeydown = function (e) {
+      if (e.key === "Enter") login();
     };
   </script>
 </body>

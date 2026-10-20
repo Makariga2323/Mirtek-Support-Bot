@@ -1,27 +1,27 @@
 {
   "meta": {
-    "version": "3.0",
+    "version": "2.0",
     "schema_version": "1.0",
     "updated_at": "2026-10-17T10:00:00Z",
-    "description": "Мок-данные для тестирования интеллектуального сервиса ООО «Миртек». Вне скоупа: users, orders, полноценная программа лояльности.",
+    "description": "Мок-данные для тестирования интеллектуального сервиса обработки клиентских обращений ООО «Миртек».",
     "data_source": "mock",
-    "author": "Лубков Глеб Юрьевич",
-    "contact": "g.lubkov@example.com",
-    "data_freshness_note": "Даты updated_at и last_updated синхронизированы на 2026-10-17T10:00:00Z. При обновлении моков менять обе даты.",
+    "author": {
+      "name": "Лубков Глеб Юрьевич",
+      "contact": "glubkov2020@gmail.com"
+    },
+    "data_freshness_note": "Все даты updated_at и last_updated синхронизированы. При обновлении менять обе даты.",
     "nullable_fields": ["density_gm2", "roll_length_m", "pack_size", "metro"],
+    "changelog": [
+      {
+        "version": "2.0",
+        "date": "2026-10-17",
+        "changes": "Финальная версия: добавлены JSON Schema, расширенные synonyms, edge_cases, prompt_examples, care_instructions, related_articles, target_audience, parking, accessibility, tracking, соцсети, changelog."
+      }
+    ],
     "schema": {
-      "catalog": "https://example.com/schemas/catalog.json",
-      "warehouses": "https://example.com/schemas/warehouses.json",
-      "stores": "https://example.com/schemas/stores.json",
-      "promotions": "https://example.com/schemas/promotions.json",
-      "delivery": "https://example.com/schemas/delivery.json",
-      "returns": "https://example.com/schemas/returns.json",
-      "payment": "https://example.com/schemas/payment.json",
-      "intents": "https://example.com/schemas/intents.json",
-      "synonyms": "https://example.com/schemas/synonyms.json"
+      "root": "https://example.com/schemas/root.json"
     }
   },
-
   "contacts": {
     "support_phone": "+7 (800) 555-35-35",
     "support_email": "support@mirtek.example",
@@ -31,11 +31,15 @@
     "urls": {
       "support": "https://mirtek.example/support",
       "returns": "https://mirtek.example/returns"
+    },
+    "social": {
+      "telegram": "https://t.me/mirtek_example",
+      "vk": "https://vk.com/mirtek_example",
+      "whatsapp": "https://wa.me/78005553535"
     }
   },
-
   "intents": {
-    "version": "3.0",
+    "version": "2.0",
     "list": [
       { "intent_id": "check_stock", "category": "product_availability", "description": "Проверить наличие товара", "example_phrases": ["Есть ли у вас?", "В наличии?", "Где можно купить?"] },
       { "intent_id": "check_quantity", "category": "product_availability", "description": "Узнать количество товара", "example_phrases": ["Сколько метров?", "Сколько штук?", "Сколько осталось?"] },
@@ -62,21 +66,45 @@
       { "intent_id": "check_receipt", "category": "payment", "description": "Узнать про чек", "example_phrases": ["Как получить чек?", "Чек на почту?"] },
       { "intent_id": "check_characteristics", "category": "assortment", "description": "Узнать характеристики товара", "example_phrases": ["Из чего состоит?", "Какая ширина?"] },
       { "intent_id": "find_analog", "category": "assortment", "description": "Найти аналог товара", "example_phrases": ["Есть подешевле?", "Что похожее?"] },
+      { "intent_id": "check_analog", "category": "assortment", "description": "Проверить наличие аналога", "example_phrases": ["Есть замена?", "Что вместо этого?"] },
+      { "intent_id": "check_brand", "category": "assortment", "description": "Узнать бренд товара", "example_phrases": ["Какой бренд?", "Кто производитель?"] },
+      { "intent_id": "check_country", "category": "assortment", "description": "Узнать страну производства", "example_phrases": ["Откуда ткань?", "Какая страна?"] },
+      { "intent_id": "check_care", "category": "assortment", "description": "Узнать уход за тканью", "example_phrases": ["Как стирать?", "Можно ли гладить?"] },
       { "intent_id": "file_complaint", "category": "complaint", "description": "Оставить жалобу", "example_phrases": ["Хочу пожаловаться", "У меня проблема"] },
       { "intent_id": "request_operator", "category": "complaint", "description": "Связаться с оператором", "example_phrases": ["Соедините с оператором", "Живой человек"] }
     ]
   },
-
   "synonyms": {
-    "version": "3.0",
+    "version": "2.0",
     "cities": [
-      { "canonical": "Москва", "synonyms": ["Мск", "Moscow", "московский"] },
-      { "canonical": "Санкт-Петербург", "synonyms": ["Питер", "СПб", "Петербург", "Saint Petersburg"] }
+      { "canonical": "Москва", "synonyms": ["Мск", "Moscow", "московский", "в Москве"] },
+      { "canonical": "Санкт-Петербург", "synonyms": ["Питер", "СПб", "Петербург", "Saint Petersburg", "в Питере"] }
     ],
     "stores": [
-      { "store_id": "STORE-001", "canonical": "Магазин на Кирова", "synonyms": ["Кирова", "на Кирова", "Кировская"] },
-      { "store_id": "STORE-002", "canonical": "Магазин на Ленина", "synonyms": ["Ленина", "на Ленина", "Ленинская"] },
-      { "store_id": "STORE-003", "canonical": "Магазин в ТЦ «Галерея»", "synonyms": ["Галерея", "ТЦ Галерея", "в Галерее"] }
+      { "store_id": "STORE-001", "canonical": "Магазин на Кирова", "synonyms": ["Кирова", "на Кирова", "Кировская", "Кировский"] },
+      { "store_id": "STORE-002", "canonical": "Магазин на Ленина", "synonyms": ["Ленина", "на Ленина", "Ленинская", "Ленинский"] },
+      { "store_id": "STORE-003", "canonical": "Магазин в ТЦ «Галерея»", "synonyms": ["Галерея", "ТЦ Галерея", "в Галерее", "Галерейный"] }
+    ],
+    "colors": [
+      { "canonical": "синий", "synonyms": ["синенький", "синеватый", "blue"] },
+      { "canonical": "красный", "synonyms": ["красненький", "алый", "red"] },
+      { "canonical": "белый", "synonyms": ["беленький", "white"] },
+      { "canonical": "чёрный", "synonyms": ["черный", "чёрненький", "black"] },
+      { "canonical": "зелёный", "synonyms": ["зеленый", "green"] },
+      { "canonical": "бежевый", "synonyms": ["beige", "телесный"] },
+      { "canonical": "серый", "synonyms": ["серенький", "grey", "gray"] },
+      { "canonical": "розовый", "synonyms": ["розовенький", "pink"] },
+      { "canonical": "бордовый", "synonyms": ["винный", "burgundy"] }
+    ],
+    "units": [
+      { "canonical": "метр", "synonyms": ["м", "m", "погонный метр", "пог. м"] },
+      { "canonical": "штука", "synonyms": ["шт", "штук", "единица"] },
+      { "canonical": "упаковка", "synonyms": ["уп", "пачка", "упак"] },
+      { "canonical": "рулон", "synonyms": ["рул", "ролик"] }
+    ],
+    "promotion_terms": [
+      { "canonical": "скидка", "synonyms": ["discount", "акция", "распродажа", "sale", "промо"] },
+      { "canonical": "промокод", "synonyms": ["promo", "промо-код", "купон"] }
     ],
     "product_terms": [
       { "canonical": "атлас", "synonyms": ["атласная ткань", "атласный"] },
@@ -84,11 +112,17 @@
       { "canonical": "шёлк", "synonyms": ["шелк", "шёлковая ткань", "шелковая"] },
       { "canonical": "лён", "synonyms": ["лен", "льняная ткань", "льняная"] },
       { "canonical": "фурнитура", "synonyms": ["аксессуары", "мелочёвка"] }
+    ],
+    "common_typos": [
+      { "canonical": "атлас", "typos": ["атласс", "атлаз", "атлась"] },
+      { "canonical": "хлопок", "typos": ["халок", "хлапок", "хлопак"] },
+      { "canonical": "шёлк", "typos": ["шелк", "шолк", "шёлг"] },
+      { "canonical": "доставка", "typos": ["дставка", "даставка", "доставкa"] },
+      { "canonical": "возврат", "typos": ["вазврат", "возврот", "возрат"] }
     ]
   },
-
   "catalog": {
-    "version": "3.0",
+    "version": "2.0",
     "products": [
       {
         "article": "12345",
@@ -109,6 +143,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C, не отбеливать",
+        "related_articles": ["12346", "12347", "12348"],
         "image_url": "https://example.com/images/12345.jpg"
       },
       {
@@ -130,6 +166,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C, не отбеливать",
+        "related_articles": ["12345", "12347", "12348"],
         "image_url": "https://example.com/images/12346.jpg"
       },
       {
@@ -151,6 +189,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C, не отбеливать",
+        "related_articles": ["12345", "12346", "12348"],
         "image_url": "https://example.com/images/12347.jpg"
       },
       {
@@ -172,6 +212,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C, не отбеливать",
+        "related_articles": ["12345", "12346", "12347"],
         "image_url": "https://example.com/images/12348.jpg"
       },
       {
@@ -193,6 +235,8 @@
         "currency": "RUB",
         "brand": "ЭкоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C, можно отбеливать",
+        "related_articles": ["23457", "23458", "23459"],
         "image_url": "https://example.com/images/23456.jpg"
       },
       {
@@ -214,6 +258,8 @@
         "currency": "RUB",
         "brand": "ЭкоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C, можно отбеливать",
+        "related_articles": ["23456", "23458", "23459"],
         "image_url": "https://example.com/images/23457.jpg"
       },
       {
@@ -235,6 +281,8 @@
         "currency": "RUB",
         "brand": "ЭкоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C, можно отбеливать",
+        "related_articles": ["23456", "23457", "23459"],
         "image_url": "https://example.com/images/23458.jpg"
       },
       {
@@ -256,6 +304,8 @@
         "currency": "RUB",
         "brand": "ЭкоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C, не отбеливать",
+        "related_articles": ["23456", "23457", "23458"],
         "image_url": "https://example.com/images/23459.jpg"
       },
       {
@@ -277,6 +327,8 @@
         "currency": "RUB",
         "brand": "ИталТекс",
         "country": "Италия",
+        "care_instructions": "Только ручная стирка при 30°C, глажка при 100°C, не отжимать",
+        "related_articles": ["34568"],
         "image_url": "https://example.com/images/34567.jpg"
       },
       {
@@ -298,6 +350,8 @@
         "currency": "RUB",
         "brand": "ИталТекс",
         "country": "Италия",
+        "care_instructions": "Только ручная стирка при 30°C, глажка при 100°C, не отжимать",
+        "related_articles": ["34567"],
         "image_url": "https://example.com/images/34568.jpg"
       },
       {
@@ -319,6 +373,8 @@
         "currency": "RUB",
         "brand": "ЛенТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 200°C, можно отбеливать",
+        "related_articles": ["45679"],
         "image_url": "https://example.com/images/45678.jpg"
       },
       {
@@ -340,6 +396,8 @@
         "currency": "RUB",
         "brand": "ЛенТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 200°C, можно отбеливать",
+        "related_articles": ["45678"],
         "image_url": "https://example.com/images/45679.jpg"
       },
       {
@@ -361,6 +419,8 @@
         "currency": "RUB",
         "brand": "ШвейТекс",
         "country": "Россия",
+        "care_instructions": "Не стирать, клеить утюгом при 150°C",
+        "related_articles": ["56790"],
         "image_url": "https://example.com/images/56789.jpg"
       },
       {
@@ -382,6 +442,8 @@
         "currency": "RUB",
         "brand": "ШвейТекс",
         "country": "Россия",
+        "care_instructions": "Не стирать, клеить утюгом при 150°C",
+        "related_articles": ["56789"],
         "image_url": "https://example.com/images/56790.jpg"
       },
       {
@@ -403,6 +465,8 @@
         "currency": "RUB",
         "brand": "ШвейФур",
         "country": "Россия",
+        "care_instructions": "Не стирать при высокой температуре",
+        "related_articles": ["67891"],
         "image_url": "https://example.com/images/67890.jpg"
       },
       {
@@ -424,6 +488,8 @@
         "currency": "RUB",
         "brand": "ШвейФур",
         "country": "Россия",
+        "care_instructions": "Не стирать при высокой температуре",
+        "related_articles": ["67890"],
         "image_url": "https://example.com/images/67891.jpg"
       },
       {
@@ -445,6 +511,8 @@
         "currency": "RUB",
         "brand": "ЭкоФур",
         "country": "Россия",
+        "care_instructions": "Не стирать при высокой температуре",
+        "related_articles": ["78902"],
         "image_url": "https://example.com/images/78901.jpg"
       },
       {
@@ -466,6 +534,8 @@
         "currency": "RUB",
         "brand": "ШвейФур",
         "country": "Россия",
+        "care_instructions": "Не стирать при высокой температуре",
+        "related_articles": ["78901"],
         "image_url": "https://example.com/images/78902.jpg"
       },
       {
@@ -487,6 +557,8 @@
         "currency": "RUB",
         "brand": "НиткоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C",
+        "related_articles": ["89013"],
         "image_url": "https://example.com/images/89012.jpg"
       },
       {
@@ -508,6 +580,8 @@
         "currency": "RUB",
         "brand": "НиткоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C",
+        "related_articles": ["89012"],
         "image_url": "https://example.com/images/89013.jpg"
       },
       {
@@ -529,6 +603,8 @@
         "currency": "RUB",
         "brand": "Кружевница",
         "country": "Россия",
+        "care_instructions": "Ручная стирка при 30°C",
+        "related_articles": ["90124"],
         "image_url": "https://example.com/images/90123.jpg"
       },
       {
@@ -550,6 +626,8 @@
         "currency": "RUB",
         "brand": "Кружевница",
         "country": "Россия",
+        "care_instructions": "Ручная стирка при 30°C",
+        "related_articles": ["90123"],
         "image_url": "https://example.com/images/90124.jpg"
       },
       {
@@ -571,6 +649,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C",
+        "related_articles": ["01235", "01236"],
         "image_url": "https://example.com/images/01234.jpg"
       },
       {
@@ -592,6 +672,8 @@
         "currency": "RUB",
         "brand": "ТексТкань",
         "country": "Россия",
+        "care_instructions": "Ручная стирка при 30°C, глажка при 100°C",
+        "related_articles": ["01234", "01236"],
         "image_url": "https://example.com/images/01235.jpg"
       },
       {
@@ -613,6 +695,8 @@
         "currency": "RUB",
         "brand": "ЭкоТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C",
+        "related_articles": ["01234", "01235"],
         "image_url": "https://example.com/images/01236.jpg"
       },
       {
@@ -634,6 +718,8 @@
         "currency": "RUB",
         "brand": "ДенимТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 40°C, глажка при 150°C",
+        "related_articles": ["01238", "01239"],
         "image_url": "https://example.com/images/01237.jpg"
       },
       {
@@ -655,6 +741,8 @@
         "currency": "RUB",
         "brand": "ВулТекс",
         "country": "Россия",
+        "care_instructions": "Химчистка или ручная стирка при 30°C",
+        "related_articles": ["01237", "01239"],
         "image_url": "https://example.com/images/01238.jpg"
       },
       {
@@ -676,6 +764,8 @@
         "currency": "RUB",
         "brand": "АутдорТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, не гладить",
+        "related_articles": ["01237", "01238", "01240"],
         "image_url": "https://example.com/images/01239.jpg"
       },
       {
@@ -697,13 +787,14 @@
         "currency": "RUB",
         "brand": "АутдорТекс",
         "country": "Россия",
+        "care_instructions": "Стирка при 30°C, глажка при 110°C",
+        "related_articles": ["01239"],
         "image_url": "https://example.com/images/01240.jpg"
       }
     ]
   },
-
   "warehouses": {
-    "version": "3.0",
+    "version": "2.0",
     "warehouses": [
       {
         "warehouse_id": "WH-001",
@@ -842,9 +933,8 @@
       }
     ]
   },
-
   "stores": {
-    "version": "3.0",
+    "version": "2.0",
     "timezone": "Europe/Moscow",
     "stores": [
       {
@@ -873,7 +963,9 @@
         "special_schedule": [
           { "date": "2026-10-20", "hours": "closed", "reason": "Санитарный день" }
         ],
-        "services": ["самовывоз", "бронирование", "оплата картой"]
+        "services": ["самовывоз", "бронирование", "оплата картой"],
+        "parking": true,
+        "accessibility": { "wheelchair": true, "elevator": false }
       },
       {
         "store_id": "STORE-002",
@@ -901,7 +993,9 @@
         "special_schedule": [
           { "date": "2026-10-21", "hours": "closed", "reason": "Санитарный день" }
         ],
-        "services": ["самовывоз", "оплата картой"]
+        "services": ["самовывоз", "оплата картой"],
+        "parking": false,
+        "accessibility": { "wheelchair": false, "elevator": false }
       },
       {
         "store_id": "STORE-003",
@@ -928,13 +1022,14 @@
         "special_schedule": [
           { "date": "2026-10-22", "hours": "closed", "reason": "Санитарный день" }
         ],
-        "services": ["самовывоз", "бронирование", "оплата картой", "рассрочка"]
+        "services": ["самовывоз", "бронирование", "оплата картой", "рассрочка"],
+        "parking": true,
+        "accessibility": { "wheelchair": true, "elevator": true }
       }
     ]
   },
-
   "promotions": {
-    "version": "3.0",
+    "version": "2.0",
     "promotions": [
       {
         "promotion_id": "PROMO-001",
@@ -951,6 +1046,7 @@
         "priority": 1,
         "stackable": false,
         "stacking_group": "discount",
+        "target_audience": "all",
         "url": "https://mirtek.example/promotions/atlas-15"
       },
       {
@@ -968,6 +1064,7 @@
         "priority": 2,
         "stackable": false,
         "stacking_group": "bogo",
+        "target_audience": "all",
         "url": "https://mirtek.example/promotions/cotton-bogo"
       },
       {
@@ -985,6 +1082,7 @@
         "priority": 3,
         "stackable": true,
         "stacking_group": "promo_code",
+        "target_audience": "new_customers",
         "url": "https://mirtek.example/promotions/welcome10"
       },
       {
@@ -1002,6 +1100,7 @@
         "priority": 4,
         "stackable": true,
         "stacking_group": "delivery",
+        "target_audience": "all",
         "url": "https://mirtek.example/promotions/free-delivery",
         "related_section": "delivery"
       },
@@ -1020,6 +1119,7 @@
         "priority": 5,
         "stackable": false,
         "stacking_group": "discount",
+        "target_audience": "all",
         "url": "https://mirtek.example/promotions/accessories-20"
       },
       {
@@ -1037,7 +1137,26 @@
         "priority": 6,
         "stackable": true,
         "stacking_group": "gift",
+        "target_audience": "all",
         "url": "https://mirtek.example/promotions/gift-5000"
+      },
+      {
+        "promotion_id": "PROMO-007",
+        "name": "VIP-скидка 25% на шёлк",
+        "description": "Скидка 25% на натуральный шёлк для VIP-клиентов",
+        "type": "discount",
+        "discount_percent": 25,
+        "applicable_articles": ["34567", "34568"],
+        "applicable_stores": ["STORE-001", "STORE-003"],
+        "start_date": "2026-10-01",
+        "end_date": "2026-11-30",
+        "conditions": "Только для владельцев карты постоянного клиента",
+        "promo_code": null,
+        "priority": 7,
+        "stackable": false,
+        "stacking_group": "discount",
+        "target_audience": "vip",
+        "url": "https://mirtek.example/promotions/silk-vip"
       }
     ],
     "stacking_rules": [
@@ -1067,14 +1186,18 @@
       }
     ]
   },
-
   "delivery": {
-    "version": "3.0",
+    "version": "2.0",
     "available": true,
     "restrictions": {
       "max_weight_kg": 20,
       "max_length_m": 5,
       "min_order_amount": 500
+    },
+    "tracking": {
+      "available": true,
+      "url": "https://mirtek.example/track",
+      "description": "Отслеживание доступно после отправки заказа"
     },
     "methods": [
       {
@@ -1101,9 +1224,8 @@
       }
     ]
   },
-
   "returns": {
-    "version": "3.0",
+    "version": "2.0",
     "policy": "Возврат товара надлежащего качества возможен в течение 14 дней с момента покупки при сохранении чека и товарного вида.",
     "period_days": 14,
     "conditions": [
@@ -1140,9 +1262,8 @@
       "url": "https://mirtek.example/returns"
     }
   },
-
   "payment": {
-    "version": "3.0",
+    "version": "2.0",
     "methods": [
       {
         "method_id": "PAY-CASH",
@@ -1192,20 +1313,20 @@
       "url": "https://mirtek.example/receipt"
     }
   },
-
   "loyalty": {
-    "version": "3.0",
+    "version": "2.0",
     "note": "Краткое описание программы лояльности. Полноценные users/orders — вне скоупа мок-данных.",
     "program": {
       "name": "Карта постоянного клиента",
       "threshold_rub": 5000,
       "discount_percent": 5,
-      "description": "При покупке от 5000 ₽ выдаётся карта постоянного клиента со скидкой 5% на все последующие покупки."
+      "description": "При покупке от 5000 ₽ выдаётся карта постоянного клиента со скидкой 5% на все последующие покупки.",
+      "vip_threshold_rub": 50000,
+      "vip_benefits": ["скидка 25% на шёлк (акция PROMO-007)", "приоритетная поддержка"]
     }
   },
-
   "faq": {
-    "version": "3.0",
+    "version": "2.0",
     "questions": [
       {
         "question": "Как связаться с поддержкой?",
@@ -1234,23 +1355,77 @@
         "answer": "Да, у нас есть программа лояльности. При покупке от 5000 ₽ вы получаете карту постоянного клиента со скидкой 5% на все последующие покупки.",
         "tags": ["лояльность", "скидки"],
         "related_section": "loyalty"
+      },
+      {
+        "question": "Можно ли отследить заказ?",
+        "answer": "Да, после отправки заказа вы можете отследить его на странице https://mirtek.example/track. Номер для отслеживания придёт на email.",
+        "tags": ["доставка", "отслеживание"],
+        "related_section": "delivery"
+      },
+      {
+        "question": "Есть ли у вас парковка?",
+        "answer": "Парковка есть в магазинах на Кирова (Москва) и в ТЦ «Галерея» (Санкт-Петербург). В магазине на Ленина парковки нет.",
+        "tags": ["магазин", "парковка"]
+      },
+      {
+        "question": "Доступны ли магазины для людей с инвалидностью?",
+        "answer": "Магазины на Кирова и в ТЦ «Галерея» оборудованы для людей с инвалидностью (пандусы, доступные входы). В ТЦ «Галерея» также есть лифт.",
+        "tags": ["доступность", "инвалидность"]
+      },
+      {
+        "question": "Как ухаживать за тканью?",
+        "answer": "Рекомендации по уходу указаны в карточке каждого товара. Например, атлас стирают при 30°C, шёлк — только вручную, лён — при 40°C. Если сомневаетесь — уточните у оператора.",
+        "tags": ["уход", "ткань"],
+        "related_section": "catalog"
+      },
+      {
+        "question": "Есть ли у вас подарочные сертификаты?",
+        "answer": "Да, подарочные сертификаты номиналом 1000, 3000 и 5000 ₽ можно приобрести в любом магазине.",
+        "tags": ["подарки", "сертификаты"]
+      },
+      {
+        "question": "Можно ли заказать ткань в розницу?",
+        "answer": "Да, мы продаём ткань в розницу от 1 метра. Для фурнитуры минимальная единица — 1 упаковка.",
+        "tags": ["розница", "ткань"]
+      },
+      {
+        "question": "Есть ли у вас скидки для студентов?",
+        "answer": "Да, студентам предоставляется скидка 5% при предъявлении студенческого билета. Скидка не суммируется с другими акциями.",
+        "tags": ["скидки", "студенты"]
+      },
+      {
+        "question": "Можно ли вернуть товар без чека?",
+        "answer": "Возврат без чека возможен, но только при наличии иных доказательств покупки (например, выписки по карте). Решение принимается индивидуально.",
+        "tags": ["возврат", "чек"],
+        "related_section": "returns"
+      },
+      {
+        "question": "Как узнать о новых поступлениях?",
+        "answer": "Подпишитесь на наш Telegram-канал (https://t.me/mirtek_example) или группу ВКонтакте (https://vk.com/mirtek_example) — там мы публикуем анонсы новых поступлений.",
+        "tags": ["новинки", "соцсети"],
+        "related_contact": "social"
+      },
+      {
+        "question": "Есть ли у вас оптовые продажи?",
+        "answer": "Да, мы работаем с оптовыми покупателями. Для получения прайса напишите на b2b@mirtek.example.",
+        "tags": ["опт", "b2b"],
+        "related_contact": "b2b_email"
       }
     ]
   },
-
   "handoff_rules": {
-    "version": "3.0",
+    "version": "2.0",
     "rules": [
       { "rule_id": "HR-001", "condition": "confidence < 0.5", "reason": "Низкая уверенность модели", "priority": "high" },
       { "rule_id": "HR-002", "condition": "unknown_category", "reason": "Неизвестная категория обращения", "priority": "high" },
       { "rule_id": "HR-003", "condition": "customer_requested_operator", "reason": "Клиент запросил оператора", "priority": "urgent" },
       { "rule_id": "HR-004", "condition": "no_data_in_sources", "reason": "Информация отсутствует в базе знаний", "priority": "normal" },
-      { "rule_id": "HR-005", "condition": "multiple_intents_conflict", "reason": "Конфликт нескольких намерений в одном запросе", "priority": "normal" }
+      { "rule_id": "HR-005", "condition": "multiple_intents_conflict", "reason": "Конфликт нескольких намерений в одном запросе", "priority": "normal" },
+      { "rule_id": "HR-006", "condition": "non_russian_language", "reason": "Обращение на иностранном языке", "priority": "normal" }
     ]
   },
-
   "edge_cases": {
-    "version": "3.0",
+    "version": "2.0",
     "cases": [
       {
         "case_id": "EC-001",
@@ -1281,12 +1456,41 @@
         "description": "Клиент задаёт несколько вопросов в одном сообщении",
         "expected_behavior": "Обработать первый вопрос, остальные передать оператору или уточнить",
         "example": { "question": "Есть ли атлас на Кирова и до скольки вы работаете?" }
+      },
+      {
+        "case_id": "EC-006",
+        "description": "Клиент пишет на английском",
+        "expected_behavior": "Передать оператору с причиной «Обращение на иностранном языке»",
+        "example": { "question": "Do you have blue satin?" }
+      },
+      {
+        "case_id": "EC-007",
+        "description": "Клиент пишет капсом",
+        "expected_behavior": "Обработать как обычный запрос (нормализовать регистр)",
+        "example": { "question": "ЕСТЬ ЛИ АТЛАС НА КИРОВА?" }
+      },
+      {
+        "case_id": "EC-008",
+        "description": "Клиент пишет с ошибками",
+        "expected_behavior": "Попытаться распознать через common_typos; если не удалось — передать оператору",
+        "example": { "question": "Есть ли атласс на Кирова?" }
+      },
+      {
+        "case_id": "EC-009",
+        "description": "Клиент пишет только эмодзи",
+        "expected_behavior": "Передать оператору с причиной «Не удалось распознать запрос»",
+        "example": { "question": "👗🧵❓" }
+      },
+      {
+        "case_id": "EC-010",
+        "description": "Клиент спрашивает товар, которого нет, но есть похожий",
+        "expected_behavior": "Предложить похожий товар из related_articles",
+        "example": { "question": "Есть ли атлас жёлтый?", "similar": "12345 (атлас синий)" }
       }
     ]
   },
-
   "errors": {
-    "version": "3.0",
+    "version": "2.0",
     "codes": [
       { "code": "ERR-400", "http_status": 400, "message": "Некорректный запрос", "description": "Отсутствует обязательное поле или неверный формат" },
       { "code": "ERR-401", "http_status": 401, "message": "Не авторизован", "description": "Отсутствует или неверный токен" },
@@ -1297,9 +1501,46 @@
       { "code": "ERR-503", "http_status": 503, "message": "Сервис недоступен", "description": "Временная недоступность (например, LLM)" }
     ]
   },
-
+  "prompt_examples": {
+    "version": "2.0",
+    "note": "Готовые промпты для LLM. Помогают AI-команде быстрее начать.",
+    "prompts": [
+      {
+        "prompt_id": "PROMPT-001",
+        "name": "Классификация обращения",
+        "purpose": "Определить category и intent по тексту обращения",
+        "template": "Ты — классификатор обращений клиентов магазина тканей «Миртек». Определи категорию и намерение обращения. Верни JSON: { \"category\": \"...\", \"intent\": \"...\", \"confidence\": 0.0-1.0 }. Категории: product_availability, working_hours, promotions, delivery, returns, pricing, payment, assortment, complaint, unknown. Текст обращения: {message}",
+        "example_input": "Есть ли атлас на Кирова?",
+        "example_output": { "category": "product_availability", "intent": "check_stock", "confidence": 0.95 }
+      },
+      {
+        "prompt_id": "PROMPT-002",
+        "name": "Извлечение сущностей",
+        "purpose": "Извлечь артикул, магазин, город, дату из текста",
+        "template": "Извлеки из текста обращения сущности: article (артикул), store (магазин), city (город), date (дата), product_name (название товара). Верни JSON. Если сущность не найдена — null. Текст: {message}",
+        "example_input": "Есть ли артикул 12345 на Кирова завтра?",
+        "example_output": { "article": "12345", "store": "Кирова", "city": null, "date": "завтра", "product_name": null }
+      },
+      {
+        "prompt_id": "PROMPT-003",
+        "name": "Формирование ответа (RAG)",
+        "purpose": "Сформировать ответ клиенту на основе данных из mock-data",
+        "template": "Ты — ассистент магазина тканей «Миртек». Ответь клиенту на основе предоставленных данных. Не выдумывай информацию. Если данных недостаточно — верни decision: \"handoff\" с причиной. Данные: {context}. Вопрос клиента: {message}. Верни JSON: { \"decision\": \"reply|handoff\", \"reply\": \"...\", \"confidence\": 0.0-1.0, \"handoff_reason\": null|string }",
+        "example_input": "Есть ли атлас на Кирова?",
+        "example_output": { "decision": "reply", "reply": "Да, атлас синий (артикул 12345) есть в наличии в магазине на Кирова. В наличии 45 метров.", "confidence": 0.96, "handoff_reason": null }
+      },
+      {
+        "prompt_id": "PROMPT-004",
+        "name": "Определение необходимости передачи оператору",
+        "purpose": "Понять, нужно ли передать обращение оператору",
+        "template": "Определи, нужно ли передать обращение оператору. Причины: низкая уверенность, неизвестная категория, клиент просит оператора, информация отсутствует, конфликт намерений, иностранный язык. Верни JSON: { \"handoff\": true|false, \"reason\": \"...\" }. Текст: {message}",
+        "example_input": "Соедините с оператором",
+        "example_output": { "handoff": true, "reason": "Клиент запросил оператора" }
+      }
+    ]
+  },
   "test_scenarios": {
-    "version": "3.0",
+    "version": "2.0",
     "scenarios": [
       {
         "id": "TS-001",
@@ -1435,12 +1676,56 @@
         "expected_category": "faq",
         "expected_entities": {},
         "expected_reply_contains": ["юридическими лицами"]
+      },
+      {
+        "id": "TS-016",
+        "description": "Клиент пишет на английском",
+        "input": "Do you have blue satin?",
+        "expected_decision": "handoff",
+        "expected_category": "unknown",
+        "expected_entities": {},
+        "expected_handoff_reason": "Обращение на иностранном языке"
+      },
+      {
+        "id": "TS-017",
+        "description": "Клиент пишет капсом",
+        "input": "ЕСТЬ ЛИ АТЛАС НА КИРОВА?",
+        "expected_decision": "reply",
+        "expected_category": "product_availability",
+        "expected_entities": { "product_name": "атлас", "store": "Кирова" },
+        "expected_reply_contains": ["45 метров"]
+      },
+      {
+        "id": "TS-018",
+        "description": "Клиент пишет с ошибкой",
+        "input": "Есть ли атласс на Кирова?",
+        "expected_decision": "reply",
+        "expected_category": "product_availability",
+        "expected_entities": { "product_name": "атлас", "store": "Кирова" },
+        "expected_reply_contains": ["45 метров"]
+      },
+      {
+        "id": "TS-019",
+        "description": "Клиент спрашивает про уход за тканью",
+        "input": "Как стирать шёлк?",
+        "expected_decision": "reply",
+        "expected_category": "assortment",
+        "expected_entities": { "product_name": "шёлк" },
+        "expected_reply_contains": ["ручная стирка"]
+      },
+      {
+        "id": "TS-020",
+        "description": "Клиент спрашивает про парковку",
+        "input": "У вас есть парковка на Кирова?",
+        "expected_decision": "reply",
+        "expected_category": "faq",
+        "expected_entities": { "store": "Кирова" },
+        "expected_reply_contains": ["парковка"]
       }
     ]
   },
-
   "examples": {
-    "version": "3.0",
+    "version": "2.0",
     "items": [
       {
         "scenario": "product_availability",
@@ -1495,6 +1780,19 @@
         }
       },
       {
+        "scenario": "product_availability",
+        "difficulty": "medium",
+        "tags": ["caps", "typo"],
+        "question": "ЕСТЬ ЛИ АТЛАСС НА КИРОВА?",
+        "expected": {
+          "decision": "reply",
+          "category": "product_availability",
+          "reply": "Да, атлас синий (артикул 12345) есть в наличии в магазине на Кирова. В наличии 45 метров.",
+          "entities": { "product_name": "атлас", "store": "Кирова" },
+          "confidence": 0.91
+        }
+      },
+      {
         "scenario": "working_hours",
         "difficulty": "easy",
         "tags": ["store", "today"],
@@ -1534,6 +1832,19 @@
         }
       },
       {
+        "scenario": "working_hours",
+        "difficulty": "easy",
+        "tags": ["now"],
+        "question": "Вы сейчас открыты?",
+        "expected": {
+          "decision": "reply",
+          "category": "working_hours",
+          "reply": "Уточните, пожалуйста, какой магазин вас интересует: на Кирова, на Ленина или в ТЦ «Галерея»?",
+          "entities": {},
+          "confidence": 0.85
+        }
+      },
+      {
         "scenario": "promotions",
         "difficulty": "easy",
         "tags": ["list"],
@@ -1541,7 +1852,7 @@
         "expected": {
           "decision": "reply",
           "category": "promotions",
-          "reply": "Сейчас действуют акции: скидка 15% на атлас (до 31 октября), хлопок 2 по цене 1 в магазине на Кирова (до 25 октября), промокод WELCOME10 на первый заказ, бесплатная доставка от 3000 ₽, скидка 20% на фурнитуру от 5 единиц (до 15 ноября) и подарок к заказу от 5000 ₽.",
+          "reply": "Сейчас действуют акции: скидка 15% на атлас (до 31 октября), хлопок 2 по цене 1 в магазине на Кирова (до 25 октября), промокод WELCOME10 на первый заказ, бесплатная доставка от 3000 ₽, скидка 20% на фурнитуру от 5 единиц (до 15 ноября), подарок к заказу от 5000 ₽ и VIP-скидка 25% на шёлк (до 30 ноября).",
           "entities": {},
           "confidence": 0.93
         }
@@ -1570,6 +1881,19 @@
           "reply": "Да, промокод WELCOME10 даёт скидку 10% на первый заказ. Действует до 31 декабря 2026 года для новых клиентов.",
           "entities": { "promo_code": "WELCOME10" },
           "confidence": 0.97
+        }
+      },
+      {
+        "scenario": "promotions",
+        "difficulty": "hard",
+        "tags": ["vip", "silk"],
+        "question": "У меня есть карта постоянного клиента, есть ли скидка на шёлк?",
+        "expected": {
+          "decision": "reply",
+          "category": "promotions",
+          "reply": "Да, для владельцев карты постоянного клиента действует VIP-скидка 25% на натуральный шёлк до 30 ноября в магазинах на Кирова и в ТЦ «Галерея».",
+          "entities": { "product_name": "шёлк", "audience": "vip" },
+          "confidence": 0.9
         }
       },
       {
@@ -1612,6 +1936,19 @@
         }
       },
       {
+        "scenario": "delivery",
+        "difficulty": "medium",
+        "tags": ["tracking"],
+        "question": "Можно ли отследить заказ?",
+        "expected": {
+          "decision": "reply",
+          "category": "delivery",
+          "reply": "Да, после отправки заказа вы можете отследить его на странице https://mirtek.example/track. Номер для отслеживания придёт на email.",
+          "entities": {},
+          "confidence": 0.94
+        }
+      },
+      {
         "scenario": "returns",
         "difficulty": "easy",
         "tags": ["period"],
@@ -1648,6 +1985,19 @@
           "reply": "Возврат денег осуществляется в течение 10 рабочих дней с момента оформления возврата. Способ возврата: наличные, на карту или на расчётный счёт.",
           "entities": {},
           "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "returns",
+        "difficulty": "hard",
+        "tags": ["no_receipt"],
+        "question": "Можно ли вернуть товар без чека?",
+        "expected": {
+          "decision": "reply",
+          "category": "returns",
+          "reply": "Возврат без чека возможен, но только при наличии иных доказательств покупки (например, выписки по карте). Решение принимается индивидуально.",
+          "entities": {},
+          "confidence": 0.9
         }
       },
       {
@@ -1690,6 +2040,97 @@
         }
       },
       {
+        "scenario": "assortment",
+        "difficulty": "medium",
+        "tags": ["care"],
+        "question": "Как стирать шёлк?",
+        "expected": {
+          "decision": "reply",
+          "category": "assortment",
+          "reply": "Натуральный шёлк рекомендуется стирать только вручную при 30°C, гладить при 100°C, не отжимать.",
+          "entities": { "product_name": "шёлк" },
+          "confidence": 0.95
+        }
+      },
+      {
+        "scenario": "assortment",
+        "difficulty": "medium",
+        "tags": ["brand"],
+        "question": "Какой бренд у атласа?",
+        "expected": {
+          "decision": "reply",
+          "category": "assortment",
+          "reply": "Атлас производит бренд «ТексТкань» (Россия).",
+          "entities": { "product_name": "атлас" },
+          "confidence": 0.93
+        }
+      },
+      {
+        "scenario": "assortment",
+        "difficulty": "hard",
+        "tags": ["analog"],
+        "question": "Есть ли аналог атласа подешевле?",
+        "expected": {
+          "decision": "reply",
+          "category": "assortment",
+          "reply": "Если вам нужен более бюджетный вариант, обратите внимание на вискозу (артикул 01234, 400 ₽/м) или шифон (артикул 01235, 280 ₽/м).",
+          "entities": { "product_name": "атлас" },
+          "confidence": 0.88
+        }
+      },
+      {
+        "scenario": "faq",
+        "difficulty": "easy",
+        "tags": ["b2b"],
+        "question": "Работаете ли вы с юридическими лицами?",
+        "expected": {
+          "decision": "reply",
+          "category": "faq",
+          "reply": "Да, мы работаем с юридическими лицами. Для оформления заказа свяжитесь с нами по телефону +7 (800) 555-35-35 или напишите на b2b@mirtek.example.",
+          "entities": {},
+          "confidence": 0.96
+        }
+      },
+      {
+        "scenario": "faq",
+        "difficulty": "easy",
+        "tags": ["parking"],
+        "question": "У вас есть парковка на Кирова?",
+        "expected": {
+          "decision": "reply",
+          "category": "faq",
+          "reply": "Да, в магазине на Кирова есть парковка.",
+          "entities": { "store": "Кирова" },
+          "confidence": 0.97
+        }
+      },
+      {
+        "scenario": "faq",
+        "difficulty": "medium",
+        "tags": ["accessibility"],
+        "question": "Доступны ли магазины для людей с инвалидностью?",
+        "expected": {
+          "decision": "reply",
+          "category": "faq",
+          "reply": "Магазины на Кирова и в ТЦ «Галерея» оборудованы для людей с инвалидностью (пандусы, доступные входы). В ТЦ «Галерея» также есть лифт.",
+          "entities": {},
+          "confidence": 0.95
+        }
+      },
+      {
+        "scenario": "faq",
+        "difficulty": "medium",
+        "tags": ["social"],
+        "question": "Как узнать о новых поступлениях?",
+        "expected": {
+          "decision": "reply",
+          "category": "faq",
+          "reply": "Подпишитесь на наш Telegram-канал (https://t.me/mirtek_example) или группу ВКонтакте (https://vk.com/mirtek_example) — там мы публикуем анонсы новых поступлений.",
+          "entities": {},
+          "confidence": 0.94
+        }
+      },
+      {
         "scenario": "unknown",
         "difficulty": "hard",
         "tags": ["unknown", "handoff"],
@@ -1715,6 +2156,48 @@
           "handoff_reason": "Клиент запросил оператора",
           "entities": {},
           "confidence": 0.99
+        }
+      },
+      {
+        "scenario": "unknown",
+        "difficulty": "hard",
+        "tags": ["english", "handoff"],
+        "question": "Do you have blue satin?",
+        "expected": {
+          "decision": "handoff",
+          "category": "unknown",
+          "reply": null,
+          "handoff_reason": "Обращение на иностранном языке",
+          "entities": {},
+          "confidence": 0.4
+        }
+      },
+      {
+        "scenario": "unknown",
+        "difficulty": "hard",
+        "tags": ["emoji", "handoff"],
+        "question": "👗🧵❓",
+        "expected": {
+          "decision": "handoff",
+          "category": "unknown",
+          "reply": null,
+          "handoff_reason": "Не удалось распознать запрос",
+          "entities": {},
+          "confidence": 0.3
+        }
+      },
+      {
+        "scenario": "unknown",
+        "difficulty": "hard",
+        "tags": ["weather", "handoff"],
+        "question": "Какая завтра погода?",
+        "expected": {
+          "decision": "handoff",
+          "category": "unknown",
+          "reply": null,
+          "handoff_reason": "Вне зоны компетенции сервиса",
+          "entities": {},
+          "confidence": 0.2
         }
       }
     ]

@@ -126,3 +126,18 @@ def test_without_client_id_always_runs(make_service):
     service.submit("S1", "в")
     service.submit("S1", "в")
     assert core.calls == 2
+def test_message_id_is_returned_and_stable(make_service):
+    service, _ = make_service(FakeCore(ok))
+    first = service.submit("S1", "вопрос", "m1")
+    second = service.submit("S1", "вопрос", "m1")
+    other = service.submit("S1", "другой", "m2")
+    assert first.message_id is not None
+    assert second.message_id == first.message_id
+    assert other.message_id != first.message_id
+
+
+def test_message_id_present_on_failure(make_service):
+    def boom(n):
+        raise RuntimeError("сбой")
+    service, _ = make_service(FakeCore(boom))
+    assert service.submit("S1", "вопрос", "m1").message_id is not None

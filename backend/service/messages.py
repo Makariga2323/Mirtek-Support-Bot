@@ -43,7 +43,7 @@ class MessageService:
                 continue
 
             if deadline.expired():
-                return MessageResult(MessageStatus.FAILED, "", FailReason.TIMEOUT)
+                return MessageResult(MessageStatus.FAILED, "", FailReason.TIMEOUT, None, row["id"])
             time.sleep(POLL_INTERVAL_S)
     def _run(self, message_id: int, text: str, deadline: Deadline) -> MessageResult:
         started = time.monotonic()
@@ -60,14 +60,14 @@ class MessageService:
         self._storage.finish_message(
             message_id, core_result.status, core_result.answer, None, latency
         )
-        return MessageResult(core_result.status, core_result.answer, None, latency)
+        return MessageResult(core_result.status, core_result.answer, None, latency, message_id)
 
     def _fail(self, message_id: int, reason: FailReason, started: float) -> MessageResult:
         latency = self._elapsed_ms(started)
         self._storage.finish_message(
             message_id, MessageStatus.FAILED, "", reason, latency
         )
-        return MessageResult(MessageStatus.FAILED, "", reason, latency)
+        return MessageResult(MessageStatus.FAILED, "", reason, latency, message_id)
 
     @staticmethod
     def _elapsed_ms(started: float) -> int:
@@ -81,4 +81,5 @@ class MessageService:
             row["answer"],
             FailReason(reason) if reason else None,
             row["latency_ms"],
+            row["id"],
         )

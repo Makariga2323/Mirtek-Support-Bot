@@ -46,3 +46,75 @@ def test_unknown_session_rejected(storage):
 def test_null_client_id_conflicts(storage):
     assert storage.insert_message("S1", None, "a") is not None
     assert storage.insert_message("S1", None, "a") is not None
+def test_get_session_and_delete(storage):
+    assert storage.get_session("S1")["token_hash"] == "hash"
+    assert storage.get_session("NOPE") is None
+    assert storage.delete_session("S1") is True
+    assert storage.delete_session("S1") is False
+    assert storage.get_session("S1") is None
+
+
+def test_expired_session_is_gone_with_messages(storage):
+    storage.create_session("OLD", "h", time.time() - 10)
+    storage.insert_message("OLD", "m1", "привет")
+    assert storage.get_session("OLD") is None
+    assert storage.get_message("OLD", "m1") is None
+
+
+def test_list_messages_in_order_with_ticket(storage):
+    a = storage.insert_message("S1", "m1", "один")
+    b = storage.insert_message("S1", "m2", "два")
+    storage.create_ticket("S1", b, None)
+    rows = storage.list_messages("S1")
+    assert [r["id"] for r in rows] == [a, b]
+    assert rows[0]["ticket_id"] is None
+    assert rows[1]["ticket_id"] is not None
+
+
+def test_ticket_is_idempotent(storage):
+    m = storage.insert_message("S1", "m1", "вопрос")
+    o1, t1 = storage.create_ticket("S1", m, "k1")
+    o2, t2 = storage.create_ticket("S1", m, "k1")
+    o3, t3 = storage.create_ticket("S1", m, None)
+    o4, t4 = storage.create_ticket("S1", m, "другой-ключ")
+    assert o1 == "created" and o2 == o3 == o4 == "existing"
+    assert t1["id"] == t2["id"] == t3["id"] == t4["id"]
+    assert len(storage.list_tickets("S1")) == 1
+
+
+def test_ticket_key_of_other_session_conflicts(storage):
+    storage.create_session("S2", "h2", time.time() + 3600)
+    m1 = storage.insert_message("S1", "m1", "вопрос")
+    m2 = storage.insert_message("S2", "m1", "вопрос")
+    storage.create_ticket("S1", m1, "k1")
+    outcome, ticket = storage.create_ticket("S2", m2, "k1")
+    assert outcome == "idempotency_conflict" and ticket is None
+
+
+def test_ticket_for_foreign_or_missing_message(storage):
+    storage.create_session("S2", "h2", time.time() + 3600)
+    m2 = storage.insert_message("S2", "m1", "вопрос")
+    assert storage.create_ticket("S1", m2, None)[0] == "message_not_found"
+    assert storage.create_ticket("S1", 9999, None)[0] == "message_not_found"
+
+
+def test_get_ticket(storage):
+    m = storage.insert_message("S1", "m1", "вопрос")
+    _, t = storage.create_ticket("S1", m, None)
+    assert storage.get_ticket(t["id"])["status"] == "queued"
+    assert storage.get_ticket(0) is None
+
+
+def test_delete_session_removes_tickets_too(storage):
+    m = storage.insert_message("S1", "m1", "вопрос")
+    _, t = storage.create_ticket("S1", m, "k1")
+    storage.delete_session("S1")
+    assert storage.get_ticket(t["id"]) is None
+
+
+def test_two_tickets_for_different_messages(storage):
+    a = storage.insert_message("S1", "m1", "один")
+    b = storage.insert_message("S1", "m2", "два")
+    _, t1 = storage.create_ticket("S1", a, None)
+    _, t2 = storage.create_ticket("S1", b, None)
+    assert t1["id"] != t2["id"]

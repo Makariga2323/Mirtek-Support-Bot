@@ -22,3 +22,4 @@ class MessageResult:
     answer: str = ""
     fail_reason: FailReason | None = None
     latency_ms: int | None = None
+    message_id: int | None = None

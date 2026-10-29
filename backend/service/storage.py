@@ -5,6 +5,8 @@ from pathlib import Path
 
 from .models import FailReason, MessageStatus
 
+TICKET_QUEUED = "queued"
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sessions (
     id          TEXT PRIMARY KEY,
@@ -113,4 +115,88 @@ class Storage:
                  message_id, MessageStatus.FAILED.value),
             )
             return cur.rowcount == 1
-    
+    def get_session(self, session_id: str) -> dict | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM sessions WHERE id = ?", (session_id,)
+            ).fetchone()
+            if row is None:
+                return None
+            if row["expires_at"] < time.time():
+                conn.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+                return None
+        return dict(row)
+    def delete_session(self, session_id: str) -> bool:
+        with self._connect() as conn:
+            cur = conn.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+            return cur.rowcount == 1
+    def list_messages(self, session_id: str) -> bool:
+        with self._connect() as conn:
+            rows = conn.execute(
+                """SELECT m.id, m.status, t.id AS ticket_id
+                FROM messages m
+                LEFT JOIN tickets t ON t.message_id = m.id
+                WHERE m.session_id = ?
+                ORDER BY m.id""",
+                (session_id,),
+            ).fetchall()
+        return [dict(r) for r in rows]
+    def create_ticket(self, session_id: str, message_id: int, idempotency_key:str | None) -> tuple[str, dict|None]:
+        with self._connect() as conn:
+            if idempotency_key:
+                row = conn.execute(
+                    "SELECT * FROM tickets WHERE idempotency_key = ?", (idempotency_key,)
+                ).fetchone()
+                if row is not None:
+                    if row["session_id"] != session_id or row["message_id"] != message_id:
+                        return "idempotency_conflict", None
+                    return "existing", dict(row)
+            owner = conn.execute(
+                "SELECT 1 FROM messages WHERE id = ? AND session_id = ?",
+                (message_id, session_id),
+            ).fetchone()
+            if owner is None:
+                return "message_not_found", None
+
+            cur = conn.execute(
+                """INSERT INTO tickets (session_id, message_id, idempotency_key, status, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT DO NOTHING""",
+                (session_id, message_id, idempotency_key, TICKET_QUEUED, time.time()),
+            )
+            if cur.rowcount == 1:
+                row = conn.execute(
+                    "SELECT * FROM tickets WHERE id = ?", (cur.lastrowid,)
+                ).fetchone()
+                return "created", dict(row)
+            
+            row = conn.execute(
+                "SELECT * FROM tickets WHERE message_id = ?", (message_id,)
+            ).fetchone()
+            if row is None and idempotency_key:
+                row = conn.execute(
+                    "SELECT * FROM tickets WHERE idempotency_key = ?", (idempotency_key,)
+                ).fetchone()
+            return "existing", dict(row)
+    def get_ticket(self, ticket_id: int) -> dict | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM tickets WHERE id = ?", (ticket_id,)
+            ).fetchone()
+        return dict(row) if row else None
+    def list_tickets(self, session_id: int) -> list[dict]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT * FROM tickets WHERE session_id = ? ORDER BY id", (session_id,)
+            ).fetchall()
+        return [dict(r) for r in rows] 
+    def get_message_by_id(self, message_id: int) -> dict | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM messages WHERE id = ?", (message_id,)
+            ).fetchone()
+        return dict(row) if row else None
+    def purge_expired(self) -> int:
+        with self._connect() as conn:
+            cur = conn.execute("DELETE FROM sessions WHERE expires_at < ?", (time.time(),))
+            return cur.rowcount

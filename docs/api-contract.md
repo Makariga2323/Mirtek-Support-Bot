@@ -10,18 +10,18 @@
 | `POST /api/v1/auth` | `{token}` или заголовок `Authorization: Bearer <токен>` | 200 `{session_id, expires_in}` | 401 неверный или пустой токен; 429 слишком много неудачных входов |
 | `POST /api/v1/auth/logout` | `{session_id}` | 200 `{status:"logged_out"}` | 401 `unknown_session` |
 | `POST /api/v1/chat/messages` | Bearer + `{session_id, text, client_message_id?}` | 200 `answered` или `too_complex` | 401 нет токена или неизвестная сессия; 403 сессия чужого токена; 422 плохой текст |
-| `POST /api/v1/chat/escalate` | Bearer + `{session_id, message_id, idempotency_key?}` | 200 `{ticket_id, status:"queued"}` | 401; 403; 404 `message_not_found`; 409 ключ чужой сессии |
+| `POST /api/v1/chat/escalate` | Bearer + `{session_id, message_id, idempotency_key?}` | 200 `{ticket_id, status:"queued"}` | 401; 403; 404 `message_not_found`; 409 `idempotency_conflict`: ключ уже использован другой сессией или для другого сообщения |
 | `GET /api/v1/chat/status` | `?session_id=...[&ticket_id=...]`, Bearer необязателен | 200 `{status, tickets[], messages[]}` | 403 токен не от этой сессии; 404 сессия или заявка не найдена |
 
 Ответ `/chat/messages`:
-- вопрос понятен: `{message_id, status:"answered", answer, latency_ms}`
+- вопрос понятен: `{message_id, status:"answered", answer, latency_ms}` (`latency_ms` — реально измеренное время подбора ответа на сервере, целое число мс; при повторе с тем же `client_message_id` значение прежнее)
 - вопрос непонятен: `{message_id, status:"too_complex", error, actions:["escalate"]}`
 
 Правила:
 - Текст: 1–2000 символов; пустой или из пробелов, управляющие символы (в том числе NUL) и bidi-переопределения дают 422.
 - Тот же `client_message_id` в одной сессии возвращает то же сообщение, дубль не создаётся.
-- Тот же `idempotency_key` или повторная эскалация того же сообщения возвращает ту же заявку.
-- Сессия живёт 1 час. Неудачные входы считаются по IP: после 15 за минуту неверные токены получают 429 (верные токены не блокируются).
+- Тот же `idempotency_key` для того же сообщения (или повторная эскалация того же сообщения) возвращает ту же заявку. Тот же ключ для другого сообщения или из другой сессии даёт 409.
+- Сессия живёт 1 час; при истечении и при logout удаляются её сообщения, заявки и ключи идемпотентности (в прототипе заявки не переживают сессию). Неудачные входы считаются по IP: после 15 за минуту неверные токены получают 429 (верные токены не блокируются).
 - Ответы это заглушки с пометкой `[демо]`, реальных данных нет.
 
-Фронтенд хранит в `localStorage`: `user_token` и `session_id`.
+Фронтенд хранит в `localStorage`: `user_token` и `session_id`; при выходе удаляются только эти два ключа. Адрес сервера задаётся один раз в `prototype/config.js`.

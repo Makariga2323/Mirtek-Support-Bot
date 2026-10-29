@@ -10,19 +10,21 @@
   <main class="card">
     <h1>Чат поддержки</h1>
     <div id="messages"></div>
-    <input id="text" type="text" placeholder="Ваш вопрос">
+    <input id="text" type="text" placeholder="Ваш вопрос" maxlength="2000">
     <button id="send">Отправить</button>
     <button id="logout" class="link">Выйти</button>
   </main>
 
+  <script src="config.js"></script>
   <script>
-    const API = "http://127.0.0.1:8000";   // тот же адрес, что в index.html
+    // Адрес сервера (API) задаётся в config.js
     const token = localStorage.getItem("user_token");
     const sessionId = localStorage.getItem("session_id");
     const messages = document.getElementById("messages");
 
     function goLogin() {
-      localStorage.clear();
+      localStorage.removeItem("user_token");
+      localStorage.removeItem("session_id");
       location.href = "index.html";
     }
     if (!token || !sessionId) goLogin();
@@ -46,15 +48,33 @@
         goLogin();
         throw new Error("auth");
       }
-      if (!r.ok) throw new Error("http " + r.status);
+      if (!r.ok) {
+        const err = new Error("http " + r.status);
+        err.status = r.status;
+        try { err.detail = (await r.json()).detail; } catch (_) {}
+        throw err;
+      }
       return r.json();
+    }
+
+    // Понятный текст ошибки: нет связи / сервер отклонил текст / сбой сервера
+    const TEXT_ERRORS = {
+      text_too_long: "Сообщение слишком длинное (максимум 2000 символов).",
+      empty_text: "Сообщение пустое.",
+      control_characters: "В сообщении есть недопустимые управляющие символы.",
+      bidi_override: "В сообщении есть недопустимые символы смены направления текста.",
+    };
+    function errorText(e, fallback) {
+      if (e.status === undefined) return "Сервер недоступен. Проверьте соединение и попробуйте ещё раз.";
+      if (e.status === 422) return TEXT_ERRORS[e.detail] || "Сервер не принял сообщение. Проверьте введённый текст.";
+      return fallback + " (код " + e.status + ")";
     }
 
     // Проверка сессии на сервере при открытии чата
     api("/api/v1/chat/status?session_id=" + encodeURIComponent(sessionId), "GET")
       .catch(function (e) {
         if (e.message === "http 404") goLogin();   // сессия неизвестна серверу или истекла
-        else if (e.message !== "auth") addMessage("Нет связи с сервером", "error");
+        else if (e.message !== "auth") addMessage(errorText(e, "Ошибка сервера"), "error");
       });
 
     function addEscalateButton(messageId) {
@@ -71,7 +91,7 @@
           addMessage("Запрос передан специалисту (заявка " + d.ticket_id + ")", "status");
         } catch (e) {
           btn.disabled = false;
-          if (e.message !== "auth") addMessage("Не удалось передать запрос", "error");
+          if (e.message !== "auth") addMessage(errorText(e, "Не удалось передать запрос"), "error");
         }
       };
       messages.appendChild(btn);
@@ -96,7 +116,7 @@
           addEscalateButton(data.message_id);
         }
       } catch (e) {
-        if (e.message !== "auth") addMessage("Ошибка: сервер не ответил", "error");
+        if (e.message !== "auth") addMessage(errorText(e, "Ошибка сервера"), "error");
       }
     }
 

@@ -15,10 +15,9 @@
     <p id="error" class="error"></p>
   </main>
 
+  <script src="config.js"></script>
   <script>
-    // Адрес сервера задан ОДИН раз. Менять только здесь.
-    const API = "http://127.0.0.1:8000";
-
+    // Адрес сервера (API) задаётся в config.js
     // Уже входили: чат сам проверит сессию на сервере
     if (localStorage.getItem("user_token") && localStorage.getItem("session_id")) {
       location.href = "chat.html";

@@ -1,4 +1,4 @@
-__pycachne__/
+__pycache__/
 *.py[cod]
 .venv/
 venv/
@@ -7,6 +7,9 @@ reports/
 
 #secrets and local settings
 .env 
+*sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
 
 #Editors and OS
 .idea/

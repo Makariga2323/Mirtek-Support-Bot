@@ -118,3 +118,17 @@ def test_two_tickets_for_different_messages(storage):
     _, t1 = storage.create_ticket("S1", a, None)
     _, t2 = storage.create_ticket("S1", b, None)
     assert t1["id"] != t2["id"]
+def test_recover_interrupted_marks_only_processing(storage):
+    done = storage.insert_message("S1", "m1", "готово")
+    storage.finish_message(done, MessageStatus.ANSWERED, "ответ")
+    storage.insert_message("S1", "m2", "оборвалось")
+    assert storage.recover_interrupted(0) == 1
+    assert storage.get_message("S1", "m1")["status"] == "answered"
+    row = storage.get_message("S1", "m2")
+    assert row["status"] == "failed" and row["fail_reason"] == "interrupted"
+
+
+def test_recover_interrupted_respects_age(storage):
+    storage.insert_message("S1", "m1", "свежее")
+    assert storage.recover_interrupted(60) == 0
+    assert storage.get_message("S1", "m1")["status"] == "processing"

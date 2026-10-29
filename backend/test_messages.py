@@ -141,3 +141,11 @@ def test_message_id_present_on_failure(make_service):
         raise RuntimeError("сбой")
     service, _ = make_service(FakeCore(boom))
     assert service.submit("S1", "вопрос", "m1").message_id is not None
+def test_restart_recovers_interrupted_message(make_service):
+    core = FakeCore(ok)
+    service, storage = make_service(core)
+    storage.insert_message("S1", "m1", "вопрос")       # «упали» посреди обработки
+    assert storage.recover_interrupted(0) == 1          # новый запуск сервера
+    r = service.submit("S1", "вопрос", "m1")            # клиент повторяет запрос
+    assert r.status == MessageStatus.ANSWERED and core.calls == 1
+    assert storage.get_message("S1", "m1")["attempts"] == 2

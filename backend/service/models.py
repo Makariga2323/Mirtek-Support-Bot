@@ -10,7 +10,7 @@ class MessageStatus(str, Enum):
 class FailReason(str, Enum):
     TIMEOUT = "timeout"
     CORE_ERROR = "core_error"
-    INTERRUPTED = "interuppted"
+    INTERRUPTED = "interrupted"
 
 @dataclass(frozen=True)
 class CoreResult:

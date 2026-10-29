@@ -200,3 +200,13 @@ class Storage:
         with self._connect() as conn:
             cur = conn.execute("DELETE FROM sessions WHERE expires_at < ?", (time.time(),))
             return cur.rowcount
+    def recover_interrupted(self, older_than_s: float) -> int:
+        now = time.time()
+        with self._connect() as conn:
+            cur = conn.execute(
+                """UPDATE messages
+                SET status = ?, fail_reason = ?, updated_at = ?
+                WHERE status = ? AND updated_at <= ?""",
+                (MessageStatus.FAILED.value, FailReason.INTERRUPTED.value, now, MessageStatus.PROCESSING.value, now - older_than_s)
+            )
+            return cur.rowcount

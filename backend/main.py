@@ -40,7 +40,9 @@ settings = load_settings()
 storage = Storage(settings.db_path)
 core = make_core(settings)
 service = MessageService(storage, core, settings)
-
+storage.recover_interrupted(0)
+storage.purge_expired()
+storage.recover_interrupted(settings.stale_processing_s)
 app = FastAPI(title="Mirtek Support Bot (prototype)")
 
 

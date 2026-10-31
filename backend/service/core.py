@@ -20,4 +20,10 @@ class StubCore:
 def make_core(settings: Settings) -> Core:
     if settings.core_mode == "stub":
         return StubCore()
+    if settings.core_mode == "llm":
+        from .real_core import make_llm_core   # ленивый импорт: stub-режиму модель не нужна
+        return make_llm_core(settings)
+    if settings.core_mode == "rules":
+        from .rules_core import make_rules_core   # без модели: ответы по данным
+        return make_rules_core(settings)
     raise ValueError(f"неизвестный core_mode: {settings.core_mode!r}")

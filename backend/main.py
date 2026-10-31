@@ -22,7 +22,7 @@ from service.messages import MessageService
 from service.models import MessageResult, MessageStatus
 from service.public_ids import format_id, parse_id
 from service.settings import load_settings
-from service.storage import Storage
+from service.storage import TICKET_STATUSES, Storage
 
 load_dotenv()
 VALID_TOKENS = [t.strip() for t in os.getenv("API_TOKENS", "").split(",") if t.strip()]
@@ -31,6 +31,7 @@ ORIGINS = [
     for o in os.getenv("CORS_ORIGINS", "http://127.0.0.1:5500,http://localhost:5500").split(",")
     if o.strip()
 ]
+OPERATOR_TOKENS = [t.strip() for t in os.getenv("OPERATOR_TOKENS", "").split(",") if t.strip()]
 MAX_FAILS = 15           # неудачных входов с одного IP ...
 FAIL_WINDOW = 60         # ... за столько секунд, потом 429
 
@@ -130,6 +131,21 @@ def too_many_failures(ip: str) -> bool:
         return len(q) >= MAX_FAILS
 
 
+def require_operator(authorization: str = Header(default="")) -> str:
+    # Отдельные токены оператора: токен клиента сюда не подходит
+    token = bearer(authorization)
+    ok = False
+    for t in OPERATOR_TOKENS:
+        ok |= secrets.compare_digest(token.encode("utf-8"), t.encode("utf-8"))
+    if not token or not ok:
+        raise HTTPException(status_code=401, detail="invalid_operator_token")
+    return token
+
+
+class TicketStatusRequest(BaseModel):
+    status: str
+
+
 class AuthRequest(BaseModel):
     token: Optional[str] = None
 
@@ -192,6 +208,7 @@ def message_payload(result: MessageResult) -> dict:
             "status": "answered",
             "answer": result.answer,
             "latency_ms": result.latency_ms,
+            "actions": ["escalate"],
         }
     if result.status == MessageStatus.TOO_COMPLEX:
         error = "Не удалось однозначно понять вопрос"
@@ -281,3 +298,31 @@ def status(
     else:
         value = "new"
     return {"status": value, "tickets": tickets, "messages": msgs}
+
+
+# ---- очередь оператора (отдельный токен OPERATOR_TOKENS) ----
+def operator_row(t: dict) -> dict:
+    return {
+        "ticket_id": format_id("ticket", t["id"]),
+        "status": t["status"],
+        "message_id": format_id("msg", t["message_id"]),
+        "text": t["text"],
+        "created_at": t["created_at"],
+    }
+
+
+@app.get("/api/v1/operator/tickets")
+def operator_tickets(status: Optional[str] = None, _: str = Depends(require_operator)):
+    if status is not None and status not in TICKET_STATUSES:
+        raise HTTPException(status_code=422, detail="bad_status")
+    return {"tickets": [operator_row(t) for t in storage.list_all_tickets(status)]}
+
+
+@app.patch("/api/v1/operator/tickets/{ticket_id}")
+def operator_set_status(ticket_id: str, body: TicketStatusRequest, _: str = Depends(require_operator)):
+    if body.status not in TICKET_STATUSES:
+        raise HTTPException(status_code=422, detail="bad_status")
+    number = parse_id("ticket", ticket_id)
+    if number is None or not storage.set_ticket_status(number, body.status):
+        raise HTTPException(status_code=404, detail="ticket_not_found")
+    return {"ticket_id": ticket_id, "status": body.status}

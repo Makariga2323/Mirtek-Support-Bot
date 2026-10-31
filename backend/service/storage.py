@@ -6,6 +6,7 @@ from pathlib import Path
 from .models import FailReason, MessageStatus
 
 TICKET_QUEUED = "queued"
+TICKET_STATUSES = ("queued", "in_progress", "closed")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sessions (
@@ -210,3 +211,25 @@ class Storage:
                 (MessageStatus.FAILED.value, FailReason.INTERRUPTED.value, now, MessageStatus.PROCESSING.value, now - older_than_s)
             )
             return cur.rowcount
+
+    # ---- очередь оператора ----
+    def list_all_tickets(self, status: str | None = None) -> list[dict]:
+        sql = """SELECT t.id, t.status, t.created_at, m.id AS message_id, m.text
+                 FROM tickets t JOIN messages m ON m.id = t.message_id"""
+        args: tuple = ()
+        if status:
+            sql += " WHERE t.status = ?"
+            args = (status,)
+        sql += " ORDER BY t.id"
+        with self._connect() as conn:
+            rows = conn.execute(sql, args).fetchall()
+        return [dict(r) for r in rows]
+
+    def set_ticket_status(self, ticket_id: int, status: str) -> bool:
+        if status not in TICKET_STATUSES:
+            return False
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE tickets SET status = ? WHERE id = ?", (status, ticket_id)
+            )
+            return cur.rowcount == 1

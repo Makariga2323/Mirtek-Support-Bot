@@ -16,3 +16,8 @@ reports/
 .vscode/
 .Ds_Store
 Thumbs.db
+
+__pycache__/
+.pytest_cache/
+.env
+*.sqlite3

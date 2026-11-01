@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Очередь оператора</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border-bottom: 1px solid #ccc; padding: 6px; text-align: left; vertical-align: top; }
+    td.text { max-width: 320px; word-break: break-word; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Очередь оператора</h1>
+    <div id="login">
+      <input id="optoken" type="password" placeholder="Токен оператора">
+      <button id="enter">Войти</button>
+    </div>
+    <div id="panel" hidden>
+      <label>Статус:
+        <select id="filter">
+          <option value="">все</option>
+          <option value="queued">queued</option>
+          <option value="in_progress">in_progress</option>
+          <option value="closed">closed</option>
+        </select>
+      </label>
+      <button id="refresh">Обновить</button>
+      <button id="exit" class="link">Выйти</button>
+      <table>
+        <thead><tr><th>Заявка</th><th>Вопрос клиента</th><th>Статус</th><th>Действия</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="info"></div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    // Токен хранится только в sessionStorage (исчезает при закрытии вкладки)
+    let opToken = sessionStorage.getItem("operator_token") || "";
+    const info = document.getElementById("info");
+
+    async function api(path, method, body) {
+      const r = await fetch(API + path, {
+        method: method,
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + opToken },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      if (r.status === 401) { logout("Неверный токен оператора"); throw new Error("auth"); }
+      if (!r.ok) throw new Error("http " + r.status);
+      return r.json();
+    }
+
+    function logout(message) {
+      sessionStorage.removeItem("operator_token");
+      opToken = "";
+      document.getElementById("panel").hidden = true;
+      document.getElementById("login").hidden = false;
+      info.textContent = message || "";
+    }
+
+    function button(label, onclick) {
+      const b = document.createElement("button");
+      b.textContent = label;
+      b.onclick = onclick;
+      return b;
+    }
+
+    async function setStatus(ticketId, status) {
+      try { await api("/api/v1/operator/tickets/" + encodeURIComponent(ticketId), "PATCH", { status: status }); }
+      catch (e) { if (e.message !== "auth") info.textContent = "Не удалось изменить статус"; return; }
+      load();
+    }
+
+    async function load() {
+      const status = document.getElementById("filter").value;
+      let data;
+      try { data = await api("/api/v1/operator/tickets" + (status ? "?status=" + status : ""), "GET"); }
+      catch (e) { if (e.message !== "auth") info.textContent = "Не удалось загрузить заявки"; return; }
+      info.textContent = data.tickets.length ? "" : "Заявок нет";
+      const rows = document.getElementById("rows");
+      rows.innerHTML = "";
+      data.tickets.forEach(function (t) {
+        const tr = document.createElement("tr");
+        const cells = [t.ticket_id, t.text, t.status];
+        cells.forEach(function (c, i) {
+          const td = document.createElement("td");
+          td.textContent = c;                 // textContent: текст клиента никогда не выполняется как HTML
+          if (i === 1) td.className = "text";
+          tr.appendChild(td);
+        });
+        const actions = document.createElement("td");
+        if (t.status !== "in_progress") actions.appendChild(button("В работу", function () { setStatus(t.ticket_id, "in_progress"); }));
+        if (t.status !== "closed") actions.appendChild(button("Закрыть", function () { setStatus(t.ticket_id, "closed"); }));
+        tr.appendChild(actions);
+        rows.appendChild(tr);
+      });
+    }
+
+    function showPanel() {
+      document.getElementById("login").hidden = true;
+      document.getElementById("panel").hidden = false;
+      load();
+    }
+
+    document.getElementById("enter").onclick = function () {
+      opToken = document.getElementById("optoken").value.trim();
+      if (!opToken) return;
+      sessionStorage.setItem("operator_token", opToken);
+      showPanel();
+    };
+    document.getElementById("refresh").onclick = load;
+    document.getElementById("filter").onchange = load;
+    document.getElementById("exit").onclick = function () { logout(""); };
+    if (opToken) showPanel();
+  </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Чат поддержки</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Чат поддержки</h1>
+    <div id="messages"></div>
+    <input id="text" type="text" placeholder="Ваш вопрос" maxlength="2000">
+    <button id="send">Отправить</button>
+    <button id="logout" class="link">Выйти</button>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    // Адрес сервера (API) задаётся в config.js
+    const token = localStorage.getItem("user_token");
+    const sessionId = localStorage.getItem("session_id");
+    const messages = document.getElementById("messages");
+    const sendBtn = document.getElementById("send");
+    let busy = false;   // состояние ожидания: пока ждём ответ, новое сообщение отправить нельзя
+
+    function goLogin() {
+      localStorage.removeItem("user_token");
+      localStorage.removeItem("session_id");
+      location.href = "index.html";
+    }
+    if (!token || !sessionId) goLogin();
+
+    function addMessage(text, who) {
+      const div = document.createElement("div");
+      div.className = "msg " + who;
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      return div;
+    }
+
+    // client_message_id создаётся ОДИН раз на сообщение. Повторная доставка того же сообщения
+    // (после обрыва связи) уходит с тем же id: сервер не создаст дубль. Новый вопрос = новый id.
+    function newId() {
+      if (window.crypto && crypto.randomUUID) return "c-" + crypto.randomUUID();
+      return "c-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
+
+    function setBusy(value) {
+      busy = value;
+      sendBtn.disabled = value;
+    }
+
+    // Единая функция запросов: токен в заголовке, при 401/403 возвращаем на вход
+    async function api(path, method, body) {
+      const r = await fetch(API + path, {
+        method: method,
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      if (r.status === 401 || r.status === 403) {
+        goLogin();
+        throw new Error("auth");
+      }
+      if (!r.ok) {
+        const err = new Error("http " + r.status);
+        err.status = r.status;
+        try { err.detail = (await r.json()).detail; } catch (_) {}
+        throw err;
+      }
+      return r.json();
+    }
+
+    // Понятный текст ошибки: нет связи / сервер отклонил текст / сбой сервера
+    const TEXT_ERRORS = {
+      text_too_long: "Сообщение слишком длинное (максимум 2000 символов).",
+      empty_text: "Сообщение пустое.",
+      control_characters: "В сообщении есть недопустимые управляющие символы.",
+      bidi_override: "В сообщении есть недопустимые символы смены направления текста.",
+    };
+    function errorText(e, fallback) {
+      if (e.status === undefined) return "Сервер недоступен. Проверьте соединение и попробуйте ещё раз.";
+      if (e.status === 422) return TEXT_ERRORS[e.detail] || "Сервер не принял сообщение. Проверьте введённый текст.";
+      if (e.status === 429) return "Слишком много запросов. Подождите минуту.";
+      if (e.status === 503) return "Хранилище временно недоступно. Попробуйте позже.";
+      return fallback + " (код " + e.status + ")";
+    }
+
+    // Проверка сессии на сервере при открытии чата
+    api("/api/v1/chat/status?session_id=" + encodeURIComponent(sessionId), "GET")
+      .catch(function (e) {
+        if (e.message === "http 404") goLogin();   // сессия неизвестна серверу или истекла
+        else if (e.message !== "auth") addMessage(errorText(e, "Ошибка сервера"), "error");
+      });
+
+    function addEscalateButton(messageId) {
+      const btn = document.createElement("button");
+      btn.textContent = "Позвать оператора";
+      btn.onclick = async function () {
+        btn.disabled = true;
+        try {
+          const d = await api("/api/v1/chat/escalate", "POST", {
+            session_id: sessionId,
+            message_id: messageId,
+            idempotency_key: "idem-" + messageId,   // одна заявка на одно сообщение
+          });
+          addMessage("Запрос передан специалисту (заявка " + d.ticket_id + ")", "status");
+          btn.remove();                              // повторное нажатие невозможно
+        } catch (e) {
+          btn.disabled = false;
+          if (e.message !== "auth") addMessage(errorText(e, "Не удалось передать запрос"), "error");
+        }
+      };
+      messages.appendChild(btn);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addRetryButton(text, clientMessageId) {
+      const btn = document.createElement("button");
+      btn.textContent = "Повторить отправку";
+      btn.onclick = function () {
+        btn.remove();
+        deliver(text, clientMessageId);   // тот же client_message_id: повторная доставка, не новое сообщение
+      };
+      messages.appendChild(btn);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Отправка одного сообщения. Кнопки действий строятся по data.actions при ЛЮБОМ статусе ответа.
+    async function deliver(text, clientMessageId) {
+      setBusy(true);
+      const waiting = addMessage("Печатает…", "status");
+      try {
+        const data = await api("/api/v1/chat/messages", "POST", {
+          session_id: sessionId,
+          text: text,
+          client_message_id: clientMessageId,
+        });
+        waiting.remove();
+        addMessage(data.status === "answered" ? data.answer : data.error, "bot");
+        if ((data.actions || []).indexOf("escalate") !== -1) addEscalateButton(data.message_id);
+      } catch (e) {
+        waiting.remove();
+        if (e.message === "auth") return;
+        addMessage(errorText(e, "Ошибка сервера"), "error");
+        // Ошибки 422 повторять бессмысленно (текст нужно исправить), остальные можно повторить
+        if (e.status !== 422) addRetryButton(text, clientMessageId);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function send() {
+      if (busy) return;
+      const input = document.getElementById("text");
+      const text = input.value.trim();
+      if (text === "") return;
+      addMessage(text, "user");
+      input.value = "";
+      deliver(text, newId());
+    }
+
+    sendBtn.onclick = send;
+    document.getElementById("text").onkeydown = function (e) {
+      if (e.key === "Enter") send();
+    };
+
+    document.getElementById("logout").onclick = async function () {
+      try { await api("/api/v1/auth/logout", "POST", { session_id: sessionId }); } catch (e) {}
+      goLogin();
+    };
+  </script>
+</body>
+</html>

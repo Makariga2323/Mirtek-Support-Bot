@@ -1,0 +1,94 @@
+body {
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+#messages {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msg {
+  padding: 8px 12px;
+  border-radius: 14px;
+  max-width: 75%;
+  word-break: break-word;
+}
+
+.user {
+  background-color: #0084ff;
+  color: white;
+  align-self: flex-end;
+}
+
+.bot {
+  background-color: #e4e6eb;
+  color: black;
+  align-self: flex-start;
+}
+
+.error {
+  color: #fa3e3e;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.status {
+  color: #555;
+  font-size: 13px;
+  text-align: center;
+  font-style: italic;
+  margin: 4px 0;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+button {
+  background-color: #0084ff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #006dd3;
+}
+
+.link {
+  background: none;
+  color: #555;
+  font-weight: normal;
+  text-decoration: underline;
+  margin-top: 8px;
+}

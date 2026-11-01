@@ -935,7 +935,7 @@
   },
   "stores": {
     "version": "2.0",
-    "timezone": "Europe/Moscow",
+    "timezone": "Asia/Krasnoyarsk",
     "stores": [
       {
         "store_id": "STORE-001",

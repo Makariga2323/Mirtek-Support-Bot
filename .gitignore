@@ -3,6 +3,7 @@ __pycachne__/
 .venv/
 venv/
 .pytest_cache/
+reports/
 
 #secrets and local settings
 .env 

@@ -12,4 +12,4 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -r backend/requirements.txt
-      - run: pytest
+      - run: run: PYTHONPATH=backend pytest
